@@ -522,3 +522,162 @@ func Rotate22(matrix [][]int) { //矩阵，空间复杂度O(1)
 /*
 240.搜索二维矩阵
 */
+func SearchMatrix1(matrix [][]int, target int) bool { //矩阵 第一种解法，对每一行执行二分查找，时间复杂度O(mlogn)空间复杂度O(1)
+	for _, row := range matrix {
+		//返回第一个满足 row[i] >= target 的下标 i
+		//如果不存在满足条件的元素（即所有元素都 < target），则返回 len(row)
+		i := sort.SearchInts(row, target)
+		if i < len(row) && row[i] == target { //判断条件不能调换顺序，否则会出现越界错误
+			return true
+		}
+	}
+	return false
+}
+
+func SearchMatrix2(matrix [][]int, target int) bool { //矩阵 第二种解法，Z字形查找
+	//先从最右上角的元素开始
+	//如果当前元素=target，直接返回
+	//如果当前元素小于target，说明这一行都比target小，移动到下一行
+	//如果当前元素大于target，说明这一列都比target大，移动到前一列
+	row := len(matrix)
+	col := len(matrix[0])
+	i := 0
+	j := col - 1
+	for i < row && j >= 0 {
+		if matrix[i][j] == target {
+			return true
+		} else if matrix[i][j] < target {
+			i++
+		} else {
+			j--
+		}
+	}
+	return false
+}
+
+/*
+160.相交链表
+*/
+
+// Definition for singly-linked list.
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
+func GetIntersectionNode1(headA, headB *ListNode) *ListNode { //链表 方法一 空间复杂度O(max(m,n))
+	visited := map[*ListNode]bool{}
+	for headA != nil {
+		visited[headA] = true
+		headA = headA.Next
+	}
+	//检查headB指向的节点是否在visited中出现过
+	for headB != nil {
+		if visited[headB] {
+			fmt.Printf("Intersected at '%d'", headB.Val)
+			return headB
+		}
+		headB = headB.Next
+	}
+	fmt.Println("No intersection")
+	return nil
+}
+
+func GetIntersectionNode2(headA, headB *ListNode) *ListNode { //链表 方法二 空间复杂度O(1)
+	//链表A长度 a+c 链表B长度 b+c
+	//都走过a+b+c后，要么相交，要么没有交点
+
+	//我吹过你吹过的晚风，这算不算相拥？
+	pa := headA
+	pb := headB
+	for pa != pb {
+		if pa == nil {
+			pa = headB
+		} else {
+			pa = pa.Next
+		}
+		if pb == nil {
+			pb = headA
+		} else {
+			pb = pb.Next
+		}
+	}
+	return pa
+}
+
+/*
+206.反转链表
+*/
+func ReverseList(head *ListNode) *ListNode { //链表  迭代
+	//定义一个prev用来记录当前节点的前一个节点
+	var prev *ListNode
+	curr := head
+	for curr != nil {
+		next := curr.Next
+		curr.Next = prev
+		prev = curr
+		curr = next
+	}
+	return prev
+}
+
+/*
+234.回文链表
+*/
+func IsPalindrome1(head *ListNode) bool { //链表
+	//不可取的想法（因为逆置了之后，原链表已经消失了，所以无法跟新的链表比较）
+	//先逆置链表，空间复杂度O(1)
+	//再遍历比较每个元素值是否相同，若相同，则是回文链表
+
+	//解法一
+	//双指针+数组 空间复杂度O(n)
+	nums := make([]int, 0)
+	for head != nil {
+		nums = append(nums, head.Val)
+		head = head.Next
+	}
+	i, j := 0, len(nums)-1
+	for i < j {
+		if nums[i] != nums[j] {
+			return false
+		} else {
+			i++
+			j--
+		}
+	}
+	return true
+}
+
+func IsPalindrome2(head *ListNode) bool { //链表
+	if head == nil {
+		return true
+	}
+	//解法二
+	//空间复杂度O(1)
+	//第一步，先找到前半部分的尾节点（快慢指针）
+	fast_pointer := head
+	slow_pointer := head
+	for fast_pointer.Next != nil && fast_pointer.Next.Next != nil {
+		fast_pointer = fast_pointer.Next.Next
+		slow_pointer = slow_pointer.Next
+	}
+	//第二步，翻转后半部分链表
+	var prev *ListNode
+	curr := slow_pointer.Next
+	for curr != nil {
+		next := curr.Next
+		curr.Next = prev
+		prev = curr
+		curr = next
+	}
+	//第三步，将前半部分与后半部分进行比较
+	for prev != nil {
+		if prev.Val != head.Val {
+			return false
+		} else {
+			prev = prev.Next
+			head = head.Next
+		}
+	}
+	return true
+}

@@ -29,6 +29,15 @@ func main() {
 	// matrix := [][]int{{1, 1, 1}, {1, 0, 1}, {1, 1, 1}}
 	// utils.SetZeroes2(matrix)
 	// fmt.Println(matrix)
-	matrix := [][]int{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}}
-	fmt.Println(utils.SpiralOrder(matrix))
+	// matrix := [][]int{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}}
+	// fmt.Println(utils.SpiralOrder(matrix))
+	head := &utils.ListNode{
+		Val: 1,
+		Next: &utils.ListNode{
+			Val:  2,
+			Next: nil,
+		},
+	}
+
+	fmt.Println(utils.IsPalindrome2(head))
 }
