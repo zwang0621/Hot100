@@ -681,3 +681,281 @@ func IsPalindrome2(head *ListNode) bool { //链表
 	}
 	return true
 }
+
+/*
+141.环形链表表
+*/
+func HasCycle1(head *ListNode) bool { //链表 方法一哈希 空间复杂度O(n)
+	visited := map[*ListNode]int{}
+	visited[head] += 1
+	for head != nil {
+		head = head.Next
+		visited[head] += 1
+		if visited[head] > 1 {
+			return true
+		}
+	}
+	return false
+}
+
+func HasCycle2(head *ListNode) bool { //链表 方法二 快慢指针 空间复杂度O(1)
+	//龟兔赛跑，如果有环，终能相遇
+	if head == nil {
+		return false
+	}
+	slow_pointer := head
+	fast_pointer := head.Next
+	for slow_pointer != fast_pointer {
+		if fast_pointer == nil || fast_pointer.Next == nil {
+			return false
+		}
+		slow_pointer = slow_pointer.Next
+		fast_pointer = fast_pointer.Next.Next
+	}
+	return true
+}
+
+/*
+142.环形链表Ⅱ
+*/
+func DetectCycle1(head *ListNode) *ListNode { //链表 方法一 哈希 空间复杂度O(n)
+	visited := map[*ListNode]int{}
+	for head != nil {
+		visited[head] += 1
+		head = head.Next
+		if visited[head] > 1 {
+			return head
+		}
+	}
+	return nil
+}
+
+func DetectCycle2(head *ListNode) *ListNode { //链表 方法二 快慢指针 空间复杂度O(1)
+	//这种解法需要画图分析证明
+	if head == nil {
+		return nil
+	}
+	slow, fast := head, head
+	for fast != nil {
+		slow = slow.Next
+		if fast.Next == nil {
+			return nil
+		}
+		fast = fast.Next.Next
+		if fast == slow {
+			ptr := head
+			for slow != ptr {
+				slow = slow.Next
+				ptr = ptr.Next
+			}
+			return ptr
+		}
+	}
+	return nil
+}
+
+/*
+21.合并两个有序链表
+*/
+func MergeTwoLists1(list1 *ListNode, list2 *ListNode) *ListNode { //方法一
+	var res *ListNode
+	l1, l2 := list1, list2
+	for l1 != nil && l2 != nil {
+		if l1.Val >= l2.Val {
+			l2 = l2.Next
+			list2.Next = res
+			res = list2
+			list2 = l2
+		} else {
+			l1 = l1.Next
+			list1.Next = res
+			res = list1
+			list1 = l1
+		}
+	}
+	for l1 != nil {
+		l1 = l1.Next
+		list1.Next = res
+		res = list1
+		list1 = l1
+	}
+	for l2 != nil {
+		l2 = l2.Next
+		list2.Next = res
+		res = list2
+		list2 = l2
+	}
+	var prev *ListNode
+	curr := res
+	for curr != nil {
+		next := curr.Next
+		curr.Next = prev
+		prev = curr
+		curr = next
+	}
+	return prev
+}
+
+func MergeTwoLists2(list1 *ListNode, list2 *ListNode) *ListNode { //方法二
+	dummy := &ListNode{} //这里声明一个dummy，他并不是空指针，而是指向默认值val=0，next=nil的结构体的一个指针
+	cur := dummy         //让cur指向和dummy相同的地址，cur往后移动并不会改变dummy
+	for list1 != nil && list2 != nil {
+		if list1.Val >= list2.Val {
+			cur.Next = list2
+			list2 = list2.Next
+			cur = cur.Next
+		} else {
+			cur.Next = list1
+			list1 = list1.Next
+			cur = cur.Next
+		}
+	}
+	for list1 != nil {
+		cur.Next = list1
+		list1 = list1.Next
+		cur = cur.Next
+	}
+	for list2 != nil {
+		cur.Next = list2
+		list2 = list2.Next
+		cur = cur.Next
+	}
+	return dummy.Next //头结点
+}
+
+/*
+2.两数相加
+*/
+func AddTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode { //链表
+	var val, jinwei int
+	if l1.Val+l2.Val >= 10 {
+		val = (l1.Val + l2.Val) % 10
+		jinwei = 1
+	} else {
+		val = l1.Val + l2.Val
+		jinwei = 0
+	}
+	l1 = l1.Next
+	l2 = l2.Next
+	res := &ListNode{Val: val, Next: nil}
+	cur := res
+	for l1 != nil && l2 != nil {
+		if l1.Val+l2.Val >= 10 {
+			if jinwei == 1 {
+				val = (l1.Val + l2.Val + 1) % 10
+				jinwei = 1
+			} else {
+				val = (l1.Val + l2.Val) % 10
+				jinwei = 1
+			}
+		} else {
+			if jinwei == 1 {
+				val = (l1.Val + l2.Val + 1) % 10
+				if val >= 10 || val == 0 {
+					jinwei = 1
+				} else {
+					jinwei = 0
+				}
+			} else {
+				val = l1.Val + l2.Val
+				jinwei = 0
+			}
+		}
+		new_node := &ListNode{Val: val, Next: nil}
+		cur.Next = new_node
+		cur = new_node
+		l1 = l1.Next
+		l2 = l2.Next
+	}
+	for l1 != nil {
+		if l1.Val+jinwei == 10 {
+			val = 0
+			jinwei = 1
+		} else {
+			val = l1.Val + jinwei
+			jinwei = 0
+		}
+		new_node := &ListNode{Val: val, Next: nil}
+		cur.Next = new_node
+		cur = new_node
+		l1 = l1.Next
+	}
+	for l2 != nil {
+		if l2.Val+jinwei == 10 {
+			val = 0
+			jinwei = 1
+		} else {
+			val = l2.Val + jinwei
+			jinwei = 0
+		}
+		new_node := &ListNode{Val: val, Next: nil}
+		cur.Next = new_node
+		cur = new_node
+		l2 = l2.Next
+	}
+	if jinwei == 1 {
+		new_node := &ListNode{Val: 1, Next: nil}
+		cur.Next = new_node
+		cur = new_node
+	}
+	return res
+}
+
+/*
+删除链表的倒数第n个节点
+*/
+func RemoveNthFromEnd1(head *ListNode, n int) *ListNode { //链表 方法一 时间复杂度O(n) 空间复杂度O(1)
+	//需要两次遍历
+	//最简单的想法，因为链表无法提前预估长度，所以只能先遍历确定总长度
+	//然后第二次遍历执行删除操作
+	length := 0
+	cur := 1
+	p := head
+	q := head
+	for p != nil {
+		length++
+		p = p.Next
+	}
+	loc := length - n + 1
+	if loc == 1 {
+		return head.Next
+	}
+	for q != nil {
+		if cur == loc-1 {
+			q.Next = q.Next.Next
+			break
+		} else {
+			q = q.Next
+			cur++
+		}
+	}
+	return head
+}
+
+func RemoveNthFromEnd2(head *ListNode, n int) *ListNode { //链表 方法二 时间复杂度O(n) 空间复杂度O(n)
+	//只需一次遍历
+	//用栈来记录当前遍历的元素
+	//一次遍历完成后，弹出栈的第n个元素就是我们要删除的元素
+	if head.Next == nil {
+		return nil
+	}
+	p := head
+	stack := make([]*ListNode, 0)
+	for p != nil {
+		stack = append(stack, p)
+		p = p.Next
+	}
+	if n == len(stack) {
+		return head.Next
+	}
+	stack = stack[0 : len(stack)-n]
+	stack[len(stack)-1].Next = stack[len(stack)-1].Next.Next
+	return head
+}
+
+/*
+24.两两交换链表中的节点
+*/
+func SwapPairs(head *ListNode) *ListNode {
+
+}
