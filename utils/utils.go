@@ -1176,3 +1176,55 @@ func InorderTraversal(root *TreeNode) []int { //二叉树
 	}
 	return res
 }
+
+/*
+104.二叉树的最大深度
+*/
+func Max(a, b int) int {
+	if a >= b {
+		return a
+	} else {
+		return b
+	}
+}
+
+func MaxDepth(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	if root.Left == nil && root.Right == nil {
+		return 1
+	}
+	return Max(MaxDepth(root.Left), MaxDepth(root.Right)) + 1
+}
+
+/*
+226.翻转二叉树
+*/
+func InvertTree(root *TreeNode) *TreeNode {
+	if root == nil {
+		return nil
+	}
+	root.Left, root.Right = InvertTree(root.Right), InvertTree(root.Left)
+	return root
+}
+
+/*
+101.对称二叉树
+*/
+func IsSymmetric(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+	return Ismirror(root.Left, root.Right)
+}
+
+func Ismirror(root1 *TreeNode, root2 *TreeNode) bool {
+	if root1 == nil && root2 == nil {
+		return true
+	}
+	if root1 == nil || root2 == nil {
+		return false
+	}
+	return root1.Val == root2.Val && Ismirror(root1.Left, root2.Right) && Ismirror(root1.Right, root2.Left)
+}
