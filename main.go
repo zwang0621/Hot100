@@ -34,10 +34,17 @@ func main() {
 	head := &utils.ListNode{
 		Val: 1,
 		Next: &utils.ListNode{
-			Val:  2,
-			Next: nil,
+			Val: 2,
+			Next: &utils.ListNode{
+				Val: 3,
+				Next: &utils.ListNode{
+					Val:  4,
+					Next: nil,
+				},
+			},
 		},
 	}
 
-	fmt.Println(utils.IsPalindrome2(head))
+	// fmt.Println(utils.IsPalindrome2(head))
+	fmt.Println(utils.SwapPairs(head))
 }

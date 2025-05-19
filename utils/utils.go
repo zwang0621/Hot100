@@ -956,6 +956,223 @@ func RemoveNthFromEnd2(head *ListNode, n int) *ListNode { //链表 方法二 时
 /*
 24.两两交换链表中的节点
 */
-func SwapPairs(head *ListNode) *ListNode {
+func SwapPairs(head *ListNode) *ListNode { //链表 迭代
+	//三个指针模拟迭代过程
+	if head == nil {
+		return nil
+	}
+	dummy := &ListNode{Val: 0, Next: head}
+	p := head
+	q := head.Next
+	r := dummy
 
+	//循环体内做的
+	for p != nil && q != nil {
+		p.Next = q.Next
+		q.Next = p
+		r.Next = q
+		r = p
+		p = r.Next
+		if p == nil {
+			break
+		} else {
+			q = p.Next
+		}
+	}
+	return dummy.Next
+}
+
+type Node struct {
+	Val    int
+	Next   *Node
+	Random *Node
+}
+
+/*
+138.随机链表的复制
+*/
+func CopyRandomList(head *Node) *Node { //链表 迭代 空间复杂度O(1)
+	if head == nil {
+		return nil
+	}
+	//第一步，复制每一个节点到该节点的后面
+	p := head
+	for p != nil {
+		new_node := &Node{Val: p.Val}
+		new_node.Next = p.Next
+		p.Next = new_node
+		p = p.Next.Next
+	}
+	//第二步，给复制节点的random指针赋值，依靠当前节点的next的random指针恰好等于当前节点的random指针的next
+	p = head
+	copy := p.Next
+	for p != nil {
+		if p.Random != nil {
+			p.Next.Random = p.Random.Next
+		} else {
+			p.Next.Random = nil
+		}
+		if p.Next != nil {
+			p = p.Next.Next
+		}
+	}
+	//第三步，分离复制节点和源节点,并且保留源节点的结构
+	old := head
+	new := copy
+	for old != nil {
+		old.Next = old.Next.Next
+		if new.Next != nil {
+			new.Next = new.Next.Next
+		}
+		old = old.Next
+		new = new.Next
+	}
+	return copy
+}
+
+/*
+148.排序列表
+*/
+func SortList(head *ListNode) *ListNode { //链表 递归 归并排序
+	if head == nil || head.Next == nil {
+		return head
+	}
+	//1.快慢指针找mid
+	slow, fast := head, head.Next
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+	mid := slow.Next
+	slow.Next = nil //一定要有这一行，这样才能完全分开两个子链表
+	//2.递归的排序
+	left := SortList(head)
+	right := SortList(mid)
+	//3.合并两个有序链表
+	return MergeTwoLists2(left, right)
+}
+
+/*
+146.LRU缓存 记不住，并且还有一些没理解的地方方
+*/
+type DlinkedNode struct {
+	Key, Value int
+	Prev, Next *DlinkedNode
+}
+
+type LRUCache struct {
+	Size       int
+	Capacity   int
+	Head, Tail *DlinkedNode
+	Cache      map[int]*DlinkedNode
+}
+
+func InitDlinkedNode(key, value int) *DlinkedNode {
+	return &DlinkedNode{
+		Key:   key,
+		Value: value,
+	}
+}
+
+func Constructor(capacity int) LRUCache {
+	l := LRUCache{
+		Capacity: capacity,
+		Head:     InitDlinkedNode(0, 0),
+		Tail:     InitDlinkedNode(0, 0),
+		Cache:    map[int]*DlinkedNode{},
+	}
+	l.Head.Next = l.Tail
+	l.Tail.Prev = l.Head
+	return l
+}
+
+// 新的缓存k-v来了，添加到LRUCache中去
+// 双向链表的插入元素
+func (this *LRUCache) AddToHead(node *DlinkedNode) {
+	node.Prev = this.Head
+	node.Next = this.Head.Next
+	this.Head.Next.Prev = node
+	this.Head.Next = node
+}
+
+// 被get函数调用k-v，返回value的同时，还需要把k-v移动到头部去
+func (this *LRUCache) moveToHead(node *DlinkedNode) {
+	this.removeNode(node)
+	this.AddToHead(node)
+}
+
+// 双向链表的删除节点操作
+func (this *LRUCache) removeNode(node *DlinkedNode) {
+	node.Prev.Next = node.Next
+	node.Next.Prev = node.Prev
+}
+
+// 超出LRU最大容量了，需要从尾部移除k-v
+func (this *LRUCache) removeTail() *DlinkedNode {
+	node := this.Tail.Prev
+	this.removeNode(node)
+	return node
+}
+
+func (this *LRUCache) Get(key int) int {
+	if _, ok := this.Cache[key]; !ok {
+		return -1
+	}
+	node := this.Cache[key]
+	this.moveToHead(node)
+	return node.Value
+}
+
+func (this *LRUCache) Put(key int, value int) {
+	//LRU中没有这个节点
+	if _, ok := this.Cache[key]; !ok {
+		node := InitDlinkedNode(key, value)
+		this.Cache[key] = node
+		this.AddToHead(node)
+		this.Size++
+		if this.Size > this.Capacity {
+			removed := this.removeTail()
+			delete(this.Cache, removed.Key)
+			this.Size--
+		}
+	} else {
+		node := this.Cache[key]
+		node.Value = value
+		this.moveToHead(node)
+	}
+}
+
+/*
+94.二叉树的中序遍历
+*/
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func InorderTraversal(root *TreeNode) []int { //二叉树
+	//颜色标记法，可适用于前序中序后序遍历
+	white, grey := 0, 1
+	res := make([]int, 0)
+	type colornode struct {
+		color int
+		node  *TreeNode
+	}
+	stack := []colornode{{color: white, node: root}}
+	for len(stack) > 0 {
+		n := stack[len(stack)-1]
+		stack = stack[0 : len(stack)-1]
+		if n.node == nil {
+			continue
+		}
+		if n.color == white {
+			stack = append(stack, colornode{white, n.node.Right})
+			stack = append(stack, colornode{grey, n.node})
+			stack = append(stack, colornode{white, n.node.Left})
+		} else {
+			res = append(res, n.node.Val)
+		}
+	}
+	return res
 }
