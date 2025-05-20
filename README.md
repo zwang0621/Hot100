@@ -23,3 +23,11 @@ leetcode hot100 解题代码及思路（使用go语言）
   - [148.排序链表](https://leetcode.cn/problems/sort-list)  
   - [146.LRU缓存](https://leetcode.cn/problems/lru-cache)（代码量大，逻辑并不复杂，但需要自己实现的功能多，暂时放弃）  
   - [94.二叉树中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal)（颜色遍历方法值得好好学习）
+
+- **2025.5.20** 今日完成五题：  
+  - [104.二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree)  
+  - [226.翻转二叉树](https://leetcode.cn/problems/invert-binary-tree)  
+  - [101.对称二叉树](https://leetcode.cn/problems/symmetric-tree)  
+  - [543.二叉树的直径](https://leetcode.cn/problems/diameter-of-binary-tree)  
+  - [102.二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal)
+

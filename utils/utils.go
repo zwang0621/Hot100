@@ -1180,15 +1180,7 @@ func InorderTraversal(root *TreeNode) []int { //二叉树
 /*
 104.二叉树的最大深度
 */
-func Max(a, b int) int {
-	if a >= b {
-		return a
-	} else {
-		return b
-	}
-}
-
-func MaxDepth(root *TreeNode) int {
+func MaxDepth(root *TreeNode) int { //二叉树
 	if root == nil {
 		return 0
 	}
@@ -1198,10 +1190,18 @@ func MaxDepth(root *TreeNode) int {
 	return Max(MaxDepth(root.Left), MaxDepth(root.Right)) + 1
 }
 
+func Max(a, b int) int {
+	if a >= b {
+		return a
+	} else {
+		return b
+	}
+}
+
 /*
 226.翻转二叉树
 */
-func InvertTree(root *TreeNode) *TreeNode {
+func InvertTree(root *TreeNode) *TreeNode { //二叉树
 	if root == nil {
 		return nil
 	}
@@ -1212,13 +1212,14 @@ func InvertTree(root *TreeNode) *TreeNode {
 /*
 101.对称二叉树
 */
-func IsSymmetric(root *TreeNode) bool {
+func IsSymmetric(root *TreeNode) bool { //二叉树
 	if root == nil {
 		return true
 	}
 	return Ismirror(root.Left, root.Right)
 }
 
+// 判断左子树和右子树是否轴对称
 func Ismirror(root1 *TreeNode, root2 *TreeNode) bool {
 	if root1 == nil && root2 == nil {
 		return true
@@ -1227,4 +1228,59 @@ func Ismirror(root1 *TreeNode, root2 *TreeNode) bool {
 		return false
 	}
 	return root1.Val == root2.Val && Ismirror(root1.Left, root2.Right) && Ismirror(root1.Right, root2.Left)
+}
+
+/*
+543.二叉树的直径
+*/
+func DiameterOfBinaryTree(root *TreeNode) int { //二叉树
+	//求当前节点的深度就是比较左子树与右子树哪个深度更大
+	//求当前节点的直径就是将左子树的深度加上右子树的深度
+	max_length := 0
+	_ = DepthOfNodePlusDiameter(root, &max_length)
+	return max_length
+}
+
+func DepthOfNodePlusDiameter(node *TreeNode, max_length *int) int {
+	if node == nil {
+		return 0
+	}
+	left_depth := DepthOfNodePlusDiameter(node.Left, max_length)
+	right_depth := DepthOfNodePlusDiameter(node.Right, max_length)
+	if *max_length < left_depth+right_depth {
+		*max_length = left_depth + right_depth
+	}
+	return Max(left_depth, right_depth) + 1 //我们是在求左右子树深度的过程中去讨论以当前节点为根节点的最大直径的值
+}
+
+/*
+102.二叉树的层序遍历
+*/
+func LevelOrder(root *TreeNode) [][]int {
+	if root == nil {
+		return nil
+	}
+	res := [][]int{{root.Val}}
+	visited := [][]*TreeNode{{root}}
+	for len(visited) > 0 {
+		node := visited[0] //每次弹出队列的第一个元素
+		visited = visited[1:]
+		intermediate_res := []int{}
+		intermediate_Treenode := []*TreeNode{}
+		for i := 0; i < len(node); i++ {
+			if node[i].Left != nil {
+				intermediate_Treenode = append(intermediate_Treenode, node[i].Left)
+				intermediate_res = append(intermediate_res, node[i].Left.Val)
+			}
+			if node[i].Right != nil {
+				intermediate_Treenode = append(intermediate_Treenode, node[i].Right)
+				intermediate_res = append(intermediate_res, node[i].Right.Val)
+			}
+		}
+		if len(intermediate_Treenode) > 0 {
+			visited = append(visited, intermediate_Treenode)
+			res = append(res, intermediate_res)
+		}
+	}
+	return res
 }
