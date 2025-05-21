@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"math"
 	"sort"
 )
 
@@ -1256,7 +1257,7 @@ func DepthOfNodePlusDiameter(node *TreeNode, max_length *int) int {
 /*
 102.二叉树的层序遍历
 */
-func LevelOrder(root *TreeNode) [][]int {
+func LevelOrder(root *TreeNode) [][]int { //二叉树
 	if root == nil {
 		return nil
 	}
@@ -1283,4 +1284,164 @@ func LevelOrder(root *TreeNode) [][]int {
 		}
 	}
 	return res
+}
+
+/*
+108.将有序数组转化为二叉搜索树
+*/
+func SortedArrayToBST(nums []int) *TreeNode { //二叉树
+	return Helper1(nums, 0, len(nums)-1)
+}
+
+func Helper1(nums []int, left int, right int) *TreeNode {
+	if left > right {
+		return nil
+	}
+	mid := (left + right) / 2
+	root := &TreeNode{Val: nums[mid]}
+	root.Left = Helper1(nums, left, mid-1)
+	root.Right = Helper1(nums, mid+1, right)
+	return root
+}
+
+/*
+92.验证二叉搜索树
+*/
+func IsValidBST(root *TreeNode) bool { //二叉树
+	return Helper2(root, math.MinInt64, math.MaxInt64)
+}
+
+func Helper2(root *TreeNode, left, right int) bool {
+	if root == nil {
+		return true
+	}
+	if root.Val <= left || root.Val >= right {
+		return false
+	}
+	return Helper2(root.Left, left, root.Val) && Helper2(root.Right, root.Val, right)
+}
+
+/*
+230.二叉搜索树中第k小的元素
+*/
+func KthSmallest(root *TreeNode, k int) int { //二叉树
+	//方法一，中序遍历，将结果存到一个切片里，遍历切片的第k-1个元素就是要找的第k个元素
+	//因为是二叉搜索树，所以中序遍历结果一定是升序的
+	res := []int{}
+	res = Inorder(root, &res)
+	return res[k-1]
+}
+
+func Inorder(root *TreeNode, res *[]int) []int {
+	if root == nil {
+		return nil
+	}
+	Inorder(root.Left, res)
+	*res = append(*res, root.Val)
+	Inorder(root.Right, res)
+	return *res
+}
+
+/*
+199.二叉树的右视图
+*/
+func RightSideView(root *TreeNode) []int { //二叉树
+	//层序遍历，用一个切片存储每一层遍历过的元素
+	//输出每一层的最后一个元素，即为右视图
+	if root == nil {
+		return nil
+	}
+	levelorder_res := [][]int{{root.Val}}
+	visited := [][]*TreeNode{{root}}
+	for len(visited) > 0 {
+		node_set := visited[0]
+		visited = visited[1:]
+		intermediate_vis := []*TreeNode{}
+		intermediate_res := []int{}
+		for i := 0; i < len(node_set); i++ {
+			if node_set[i].Left != nil {
+				intermediate_vis = append(intermediate_vis, node_set[i].Left)
+				intermediate_res = append(intermediate_res, node_set[i].Left.Val)
+			}
+			if node_set[i].Right != nil {
+				intermediate_vis = append(intermediate_vis, node_set[i].Right)
+				intermediate_res = append(intermediate_res, node_set[i].Right.Val)
+			}
+		}
+		if len(intermediate_vis) > 0 { //一定要注意这里的条件，否则会无限制的增长，因为前面没做对当前节点为nil的判定
+			visited = append(visited, intermediate_vis)
+			levelorder_res = append(levelorder_res, intermediate_res)
+		}
+	}
+	res := []int{}
+	for j := 0; j < len(levelorder_res); j++ {
+		res = append(res, levelorder_res[j][len(levelorder_res[j])-1])
+	}
+	return res
+}
+
+/*
+114.二叉树展开为链表
+*/
+func Flatten1(root *TreeNode) { //二叉树
+	//迭代先序颜色遍历法
+	//创建额外树节点
+	//但是函数并没有给返回值，所以这个算法无法实现，但是我第一个想法并且写出来
+	if root == nil {
+		return
+	}
+	if root.Left == nil && root.Right == nil {
+		return
+	}
+	white, grey := 0, 1
+	intermediate_res := []int{}
+	type Colornode struct {
+		Node  *TreeNode
+		Color int
+	}
+	r := Colornode{Node: root, Color: white}
+	stack := []Colornode{r}
+	for len(stack) > 0 {
+		node := stack[len(stack)-1]
+		stack = stack[0 : len(stack)-1]
+		if node.Node == nil {
+			continue
+		}
+		if node.Color == white {
+			stack = append(stack, Colornode{Node: node.Node.Right, Color: white})
+			stack = append(stack, Colornode{Node: node.Node.Left, Color: white})
+			stack = append(stack, Colornode{Node: node.Node, Color: grey})
+		} else {
+			intermediate_res = append(intermediate_res, node.Node.Val)
+		}
+	}
+	rt := &TreeNode{Val: intermediate_res[0], Left: nil, Right: nil}
+	p := rt
+	for i := 0; i < len(intermediate_res); i++ {
+		new_treenode := &TreeNode{Val: intermediate_res[i], Left: nil, Right: nil}
+		p.Right = new_treenode
+		p = new_treenode
+	}
+	return
+}
+
+func Flatten2(root *TreeNode) { //二叉树
+	//真正的原地算法 空间复杂度O(1)
+	//从根节点开始，先把左子树接到右子树上
+	//root=root.Right,循环上述操作
+	for root != nil {
+		//先找到左子树的最右边节点，用最右边节点去链接右子树
+		//先记录当前的左子树，因为一会就找不到了
+		if root.Left != nil {
+			cur := root.Left
+			p := cur
+			for cur.Right != nil {
+				cur = cur.Right
+			}
+			cur.Right = root.Right
+			root.Right = p
+			root.Left = nil
+		}
+		root = root.Right
+	}
 }

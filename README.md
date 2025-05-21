@@ -5,10 +5,10 @@ leetcode hot100 解题代码及思路（使用go语言）
 ### 进度记录
 
 - **2025.5.17** 今日完成四题：  
-  - [搜索二维矩阵 II](https://leetcode.cn/problems/search-a-2d-matrix-ii)  
-  - [相交链表](https://leetcode.cn/problems/intersection-of-two-linked-lists)  
-  - [反转链表](https://leetcode.cn/problems/reverse-linked-list)  
-  - [回文链表](https://leetcode.cn/problems/palindrome-linked-list)  
+  - [240.搜索二维矩阵 II](https://leetcode.cn/problems/search-a-2d-matrix-ii)  
+  - [160.相交链表](https://leetcode.cn/problems/intersection-of-two-linked-lists)  
+  - [206.反转链表](https://leetcode.cn/problems/reverse-linked-list)  
+  - [234.回文链表](https://leetcode.cn/problems/palindrome-linked-list)  
 
 - **2025.5.18** 今日完成五题：  
   - [141.环形链表](https://leetcode.cn/problems/linked-list-cycle)  
@@ -31,3 +31,9 @@ leetcode hot100 解题代码及思路（使用go语言）
   - [543.二叉树的直径](https://leetcode.cn/problems/diameter-of-binary-tree)  
   - [102.二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal)
 
+- **2025.5.21** 今日完成五题：  
+  - [108. 将有序数组转换为二叉搜索树](https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree)  
+  - [98. 验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree)  
+  - [230. 二叉搜索树中第k小的元素](https://leetcode.cn/problems/kth-smallest-element-in-a-bst)  
+  - [199. 二叉树的右视图](https://leetcode.cn/problems/binary-tree-right-side-view)  
+  - [114. 二叉树展开为链表](https://leetcode.cn/problems/flatten-binary-tree-to-linked-list)
