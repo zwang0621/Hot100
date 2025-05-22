@@ -37,3 +37,10 @@ leetcode hot100 解题代码及思路（使用go语言）
   - [230. 二叉搜索树中第k小的元素](https://leetcode.cn/problems/kth-smallest-element-in-a-bst)  
   - [199. 二叉树的右视图](https://leetcode.cn/problems/binary-tree-right-side-view)  
   - [114. 二叉树展开为链表](https://leetcode.cn/problems/flatten-binary-tree-to-linked-list)
+
+- **2025.5.22** 今日完成五题：  
+  - [105. 从前序与中序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal)  
+  - [437. 路径总和 III](https://leetcode.cn/problems/path-sum-iii)（用到了回溯，也没怎么懂）  
+  - [236. 二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree)（没怎么搞懂的递归）  
+  - [200. 岛屿数量](https://leetcode.cn/problems/number-of-islands)（图论的这两道题非常典型，一个用DFS来解决岛屿类型的问题，一个用BFS来解决最短路径的问题，其中DFS的模板应该作为通用模板记忆，可以用来解决一类问题）
+  - [994. 腐烂的橘子](https://leetcode.cn/problems/rotting-oranges)

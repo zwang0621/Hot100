@@ -1445,3 +1445,168 @@ func Flatten2(root *TreeNode) { //二叉树
 		root = root.Right
 	}
 }
+
+/*
+105.从前序与中序遍历序列构造二叉树
+*/
+func BuildTree(preorder []int, inorder []int) *TreeNode { //二叉树
+	//递归构建左子树与右子树
+	if len(preorder) == 0 {
+		return nil
+	}
+	root := &TreeNode{Val: preorder[0], Left: nil, Right: nil}
+	i := 0 //必须提前声明i，不然无法在下面的递归中传递长度这个参数
+	for ; i < len(inorder); i++ {
+		if inorder[i] == preorder[0] {
+			break
+		}
+	}
+	root.Left = BuildTree(preorder[1:i+1], inorder[0:i])
+	root.Right = BuildTree(preorder[i+1:], inorder[i+1:])
+	return root
+}
+
+/*
+437.路经总和
+*/
+func PathSum(root *TreeNode, targetSum int) int { //二叉树
+	//哈希表记录前缀和
+	//递归回溯
+	hashmap := map[int]int{0: 1}
+	return DFS(root, 0, targetSum, hashmap)
+}
+
+func DFS(root *TreeNode, cur_sum int, target int, hashmap map[int]int) int {
+	if root == nil {
+		return 0
+	}
+	val := root.Val
+	cur_sum += val
+	count := hashmap[cur_sum-target]
+	hashmap[cur_sum]++
+	count += DFS(root.Left, cur_sum, target, hashmap)
+	count += DFS(root.Right, cur_sum, target, hashmap)
+	hashmap[cur_sum]--
+	return count
+}
+
+/*
+236.二叉树的最近公共祖先
+*/
+func LowestCommonAncestor(root, p, q *TreeNode) *TreeNode { //二叉树
+	//递归
+	if root == nil {
+		return nil
+	}
+	if root.Val == p.Val || root.Val == q.Val {
+		return root
+	}
+	Left := LowestCommonAncestor(root.Left, p, q)
+	Right := LowestCommonAncestor(root.Right, p, q)
+	if Left != nil && Right != nil {
+		return root
+	} else if Left == nil {
+		return Right
+	} else {
+		return Left
+	}
+}
+
+/*
+200.岛屿数量
+*/
+func NumIslands(grid [][]byte) int { //图论
+	count := 0
+	for i := 0; i < len(grid); i++ {
+		for j := 0; j < len(grid[0]); j++ {
+			if grid[i][j] == '1' {
+				DFS2(grid, i, j)
+				count += 1
+			}
+		}
+	}
+	return count
+}
+
+func IsOutOfRange(grid [][]byte, x, y int) bool {
+	return x < 0 || x >= len(grid) || y < 0 || y >= len(grid[0])
+}
+
+// 关于岛屿类问题的通用解法模板，只需要在主函数中根据实际需求添加部分代码
+func DFS2(grid [][]byte, x, y int) {
+	if IsOutOfRange(grid, x, y) {
+		return
+	}
+	if grid[x][y] != '1' {
+		return
+	}
+	grid[x][y] = '2'
+	DFS2(grid, x-1, y)
+	DFS2(grid, x+1, y)
+	DFS2(grid, x, y-1)
+	DFS2(grid, x, y+1)
+}
+
+/*
+994.腐烂的橘子
+*/
+func OrangesRotting(grid [][]int) int {
+	//遍历网格，计算新鲜橘子的个数，以及把所有腐烂的橘子入队
+	//通过BFS循环，如果到最后新鲜橘子个数仍大于0，返回-1，否则返回记录的分钟数
+	type Loc struct {
+		X int
+		Y int
+	}
+	queue := make([]Loc, 0)
+	count := 0
+	minute := 0
+	for i := 0; i < len(grid); i++ {
+		for j := 0; j < len(grid[0]); j++ {
+			if grid[i][j] == 1 {
+				count++
+			} else if grid[i][j] == 2 {
+				loc := Loc{i, j}
+				queue = append(queue, loc)
+			}
+		}
+	}
+	//BFS循环条件
+	//1.队列长度大于0
+	//2.count大于0
+	for count > 0 && len(queue) > 0 {
+		length := len(queue)
+		for i := 0; i < length; i++ {
+			n := queue[0]
+			queue = queue[1:]
+			if n.X+1 < len(grid) && grid[n.X+1][n.Y] == 1 {
+				count--
+				grid[n.X+1][n.Y] = 2
+				loc := Loc{n.X + 1, n.Y}
+				queue = append(queue, loc)
+			}
+			if n.X-1 >= 0 && grid[n.X-1][n.Y] == 1 {
+				count--
+				grid[n.X-1][n.Y] = 2
+				loc := Loc{n.X - 1, n.Y}
+				queue = append(queue, loc)
+			}
+			if n.Y+1 < len(grid[0]) && grid[n.X][n.Y+1] == 1 {
+				count--
+				grid[n.X][n.Y+1] = 2
+				loc := Loc{n.X, n.Y + 1}
+				queue = append(queue, loc)
+			}
+			if n.Y-1 >= 0 && grid[n.X][n.Y-1] == 1 {
+				count--
+				grid[n.X][n.Y-1] = 2
+				loc := Loc{n.X, n.Y - 1}
+				queue = append(queue, loc)
+			}
+		}
+		minute++
+	}
+	if count > 0 {
+		return -1
+	}
+	return minute
+}
