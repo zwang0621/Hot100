@@ -44,3 +44,10 @@ leetcode hot100 解题代码及思路（使用go语言）
   - [236. 二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree)（没怎么搞懂的递归）  
   - [200. 岛屿数量](https://leetcode.cn/problems/number-of-islands)（图论的这两道题非常典型，一个用DFS来解决岛屿类型的问题，一个用BFS来解决最短路径的问题，其中DFS的模板应该作为通用模板记忆，可以用来解决一类问题）
   - [994. 腐烂的橘子](https://leetcode.cn/problems/rotting-oranges)
+
+- **2025.5.23** 今日完成五题：  
+  - [207. 课程表](https://leetcode.cn/problems/course-schedule)  
+  - [208. 实现 Trie (前缀树)](https://leetcode.cn/problems/implement-trie-prefix-tree)  
+  - [46. 全排列](https://leetcode.cn/problems/permutations)（回溯的题打算放弃了，暂时只做这一题）
+  - [35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position)  
+  - [74. 搜索二维矩阵](https://leetcode.cn/problems/search-a-2d-matrix)（sort.Search自带的库函数实现二分查找要再看一下）
