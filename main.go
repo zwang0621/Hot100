@@ -31,20 +31,23 @@ func main() {
 	// fmt.Println(matrix)
 	// matrix := [][]int{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}}
 	// fmt.Println(utils.SpiralOrder(matrix))
-	head := &utils.ListNode{
-		Val: 1,
-		Next: &utils.ListNode{
-			Val: 2,
-			Next: &utils.ListNode{
-				Val: 3,
-				Next: &utils.ListNode{
-					Val:  4,
-					Next: nil,
-				},
-			},
-		},
-	}
+	// head := &utils.ListNode{
+	// 	Val: 1,
+	// 	Next: &utils.ListNode{
+	// 		Val: 2,
+	// 		Next: &utils.ListNode{
+	// 			Val: 3,
+	// 			Next: &utils.ListNode{
+	// 				Val:  4,
+	// 				Next: nil,
+	// 			},
+	// 		},
+	// 	},
+	// }
 
 	// fmt.Println(utils.IsPalindrome2(head))
-	fmt.Println(utils.SwapPairs(head))
+	// fmt.Println(utils.SwapPairs(head))
+	nums := []int{1, 3, 5, 6}
+	target := 7
+	fmt.Println(utils.SearchInsert(nums, target))
 }

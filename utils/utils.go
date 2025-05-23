@@ -1610,3 +1610,182 @@ func OrangesRotting(grid [][]int) int {
 	}
 	return minute
 }
+
+/*
+207.课程表
+*/
+func CanFinish(numCourses int, prerequisites [][]int) bool { //图论
+	//BFS的思想
+	//根据prerequisites初始化每个节点的入度，之后再根据这个初始化入度为0的节点队列
+	//维护一个map，这个map记录了一门课的后置有哪些课
+	in_degree := make([]int, numCourses)
+	graph := map[int][]int{}
+
+	for i := 0; i < len(prerequisites); i++ {
+		x, y := prerequisites[i][0], prerequisites[i][1]
+		in_degree[x]++
+		graph[y] = append(graph[y], x)
+	}
+
+	queue := []int{}
+	for i := 0; i < numCourses; i++ {
+		if in_degree[i] == 0 {
+			queue = append(queue, i)
+		}
+	}
+
+	for len(queue) > 0 {
+		course := queue[0]
+		queue = queue[1:]
+		for i := 0; i < len(graph[course]); i++ {
+			in_degree[graph[course][i]]--
+			if in_degree[graph[course][i]] == 0 {
+				queue = append(queue, graph[course][i])
+			}
+		}
+	}
+
+	for i := 0; i < len(in_degree); i++ {
+		if in_degree[i] > 0 {
+			return false
+		}
+	}
+	return true
+}
+
+/*
+208.实现前缀树
+*/
+type Trie struct {
+	IsEnd    bool
+	children [26]*Trie
+}
+
+func Constructor2() Trie {
+	return Trie{}
+}
+
+func (this *Trie) Insert(word string) { //图论
+	node := this
+	for _, byte := range word {
+		index := byte - 'a'
+		if node.children[index] == nil {
+			node.children[index] = &Trie{}
+		}
+		node = node.children[index]
+	}
+	node.IsEnd = true
+}
+
+func (this *Trie) SearchPrefix(prefix string) *Trie {
+	node := this
+	for _, byte := range prefix {
+		byte = byte - 'a'
+		if node.children[byte] == nil {
+			return nil
+		}
+		node = node.children[byte]
+	}
+	return node
+}
+
+func (this *Trie) Search(word string) bool {
+	node := this.SearchPrefix(word)
+	if node != nil && node.IsEnd == true {
+		return true
+	}
+	return false
+	// return this.SearchPrefix(word)!=nil&&this.SearchPrefix(word).IsEnd==true
+}
+
+func (this *Trie) StartsWith(prefix string) bool {
+	node := this.SearchPrefix(prefix)
+	if node != nil {
+		return true
+	}
+	return false
+}
+
+/*
+46.全排列
+*/
+func Permute(nums []int) [][]int { //回溯
+	//定义结果数组，中间结果数组，used数组
+	res := [][]int{}
+	intermediate_res := []int{}
+	used := map[int]bool{}
+
+	var traceback func()
+	traceback = func() {
+		//如果当前中间结果的长度已经和nums长度相等，说明已经是一个排列了，添加到结果中去
+		if len(intermediate_res) == len(nums) {
+			//这里要注意要把intermediate_res复制一份再添加
+			//否则在后面回溯的时候res的值也会发生改变
+			//因为切片是引用类型
+			res = append(res, append([]int{}, intermediate_res...))
+		}
+
+		for i := 0; i < len(nums); i++ {
+			if used[i] {
+				continue
+			}
+			used[i] = true
+			intermediate_res = append(intermediate_res, nums[i])
+			traceback()
+			intermediate_res = intermediate_res[:len(intermediate_res)-1]
+			used[i] = false
+		}
+	}
+	traceback()
+	return res
+}
+
+/*
+35.搜索插入位置
+*/
+func SearchInsert(nums []int, target int) int {
+	left, right := 0, len(nums)-1
+	for left <= right {
+		mid := (left + right) / 2
+		if nums[mid] == target {
+			return mid
+		} else if nums[mid] < target {
+			left = mid + 1
+		} else {
+			right = mid - 1
+		}
+	}
+	return left
+}
+
+/*
+74.搜索二维矩阵
+*/
+func SearchMatrix(matrix [][]int, target int) bool {
+	//两次二分查找
+	//先确定在哪一行
+	//再确定在这一行中元素是否存在
+	//用到sort.Search和sort.SearchInts两个库方法
+
+	/*
+	   1.sort.Search(n int, f func(int) bool) int
+	   返回 [0, n) 中第一个 f(i)==true 的下标
+	   若全部为 false，则返回 n
+
+	   2. sort.SearchInts(a []int, x int) int
+	   等价于 sort.Search(len(a), func(i int) bool { return a[i] >= x })
+	*/
+	row := sort.Search(len(matrix), func(i int) bool {
+		return matrix[i][0] > target
+	}) - 1
+
+	if row < 0 {
+		return false
+	}
+
+	res := sort.SearchInts(matrix[row], target)
+	if res < len(matrix[row]) && matrix[row][res] == target {
+		return true
+	}
+	return false
+}
