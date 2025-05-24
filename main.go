@@ -47,7 +47,9 @@ func main() {
 
 	// fmt.Println(utils.IsPalindrome2(head))
 	// fmt.Println(utils.SwapPairs(head))
-	nums := []int{1, 3, 5, 6}
-	target := 7
-	fmt.Println(utils.SearchInsert(nums, target))
+	// nums := []int{1, 3, 5, 6}
+	// target := 7
+	// fmt.Println(utils.SearchInsert(nums, target))
+	s := "()"
+	fmt.Println(utils.IsValid(s))
 }

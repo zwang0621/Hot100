@@ -51,3 +51,10 @@ leetcode hot100 解题代码及思路（使用go语言）
   - [46. 全排列](https://leetcode.cn/problems/permutations)（回溯的题打算放弃了，暂时只做这一题）
   - [35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position)  
   - [74. 搜索二维矩阵](https://leetcode.cn/problems/search-a-2d-matrix)（sort.Search自带的库函数实现二分查找要再看一下）
+
+- **2025.5.24** 今日完成五题：  
+  - [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array)  
+  - [33. 搜索旋转排序数组](https://leetcode.cn/problems/search-in-rotated-sorted-array)（二分查找的这两道题需要好好思考一下）
+  - [153. 寻找旋转排序数组中的最小值](https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array)  
+  - [20. 有效的括号](https://leetcode.cn/problems/valid-parentheses)  
+  - [155. 最小栈](https://leetcode.cn/problems/min-stack)

@@ -1743,7 +1743,7 @@ func Permute(nums []int) [][]int { //回溯
 /*
 35.搜索插入位置
 */
-func SearchInsert(nums []int, target int) int {
+func SearchInsert(nums []int, target int) int { //二分查找
 	left, right := 0, len(nums)-1
 	for left <= right {
 		mid := (left + right) / 2
@@ -1761,7 +1761,7 @@ func SearchInsert(nums []int, target int) int {
 /*
 74.搜索二维矩阵
 */
-func SearchMatrix(matrix [][]int, target int) bool {
+func SearchMatrix(matrix [][]int, target int) bool { //二分查找
 	//两次二分查找
 	//先确定在哪一行
 	//再确定在这一行中元素是否存在
@@ -1788,4 +1788,139 @@ func SearchMatrix(matrix [][]int, target int) bool {
 		return true
 	}
 	return false
+}
+
+/*
+34. 在排序数组中查找元素的第一个和最后一个位置
+*/
+func SearchRange(nums []int, target int) []int { //二分查找
+	//直接用sort.SearchInts()
+	//开始位置即为第一个大于等于x的位置
+	//结束位置即为第一个大于等于x+1的位置-1
+	left := sort.SearchInts(nums, target)
+	if left == len(nums) || nums[left] != target { //需要判断找到的下标是否符合要求
+		return []int{-1, -1}
+	}
+	right := sort.SearchInts(nums, target+1) - 1 //关于right的情况就不要单独判断，因为right肯定符合要求
+	return []int{left, right}
+}
+
+/*
+33. 搜索旋转排序数组
+*/
+func Search(nums []int, target int) int { //二分查找
+	//旋转过后也可用二分查找
+	//旋转过后的数组一定是一部分有序，一部分无序
+	//每次二分查找都是去有序的那部分去找
+	//如果target不在有序的这部分，再去接着二分就有变成一部分有序，一部分无序
+	left, right := 0, len(nums)-1
+	for left <= right {
+		mid := (left + right) / 2
+		if nums[mid] == target {
+			return mid
+		}
+		if nums[left] <= nums[mid] { //如果左边有序
+			if nums[left] <= target && target < nums[mid] { //target在左边部分
+				right = mid - 1
+			} else {
+				left = mid + 1
+			}
+		} else { //右边有序
+			if target > nums[mid] && target < nums[right] { //target在右边部分
+				left = mid + 1
+			} else {
+				right = mid - 1
+			}
+		}
+	}
+	return -1
+}
+
+/*
+153. 寻找旋转排序数组中的最小值
+*/
+func FindMin(nums []int) int { //二分查找
+	left, right := 0, len(nums)-1
+	for left < right { //注意此题和上一题的循环条件有所不同，因为上一题他在数组中不一定存在，所以每个位置都要考虑到，而这一题一定存在
+		mid := (left + right) / 2
+		if nums[mid] > nums[right] { //最小值一定在右边
+			left = mid + 1
+		} else { //否则在左边
+			right = mid
+		}
+	}
+	return nums[left] //当循环结束，left==right说明已经找到了最小值
+}
+
+/*
+20.有效的括号
+*/
+func IsValid(s string) bool { //栈
+	stack := make([]rune, 0)
+	for _, ch := range s {
+		if ch == '(' || ch == '{' || ch == '[' {
+			stack = append(stack, ch)
+		} else {
+			if len(stack) == 0 {
+				return false
+			}
+			b := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			if ch == '}' {
+				if b != '{' {
+					return false
+				}
+			} else if ch == ']' {
+				if b != '[' {
+					return false
+				}
+			} else {
+				if b != '(' {
+					return false
+				}
+			}
+		}
+	}
+	return len(stack) == 0
+}
+
+/*
+155.最小栈
+*/
+func min(x, y int) int { //栈
+	if x < y {
+		return x
+	}
+	return y
+}
+
+type MinStack struct {
+	stack    []int
+	minstack []int
+}
+
+func Constructor3() MinStack {
+	return MinStack{
+		stack:    []int{},
+		minstack: []int{math.MaxInt64},
+	}
+}
+
+func (this *MinStack) Push(val int) {
+	this.stack = append(this.stack, val)
+	top := this.minstack[len(this.minstack)-1]
+	this.minstack = append(this.minstack, min(top, val))
+}
+
+func (this *MinStack) Pop() {
+	this.stack = this.stack[:len(this.stack)-1]
+	this.minstack = this.minstack[:len(this.minstack)-1]
+}
+
+func (this *MinStack) Top() int {
+	return this.stack[len(this.stack)-1]
+}
+
+func (this *MinStack) GetMin() int {
+	return this.minstack[len(this.minstack)-1]
 }
