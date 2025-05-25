@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"container/heap"
 	"fmt"
 	"math"
 	"sort"
@@ -1923,4 +1924,109 @@ func (this *MinStack) Top() int {
 
 func (this *MinStack) GetMin() int {
 	return this.minstack[len(this.minstack)-1]
+}
+
+/*
+215. 数组中的第K个最大元素
+*/
+func FindKthLargest(nums []int, k int) int { //堆
+	return QuickSelect(nums, 0, len(nums)-1, len(nums)-k)
+}
+
+// 实际用到的是改进版的快排，因为要实现O（n）时间复杂度
+func QuickSelect(nums []int, l, r, k int) int {
+	if l == r {
+		return nums[k]
+	}
+	pivot := nums[l]
+	i, j := l-1, r+1
+	for i < j {
+		for i++; nums[i] < pivot; i++ {
+		}
+		for j--; nums[j] > pivot; j-- {
+		}
+		if i < j {
+			nums[i], nums[j] = nums[j], nums[i]
+		}
+	}
+	if k <= j {
+		return QuickSelect(nums, l, j, k)
+	} else {
+		return QuickSelect(nums, j+1, r, k)
+	}
+}
+
+/*
+347. 前 K 个高频元素
+*/
+func TopKFrequent(nums []int, k int) []int {
+	//先创建一个哈希表存储num和freq的对应映射
+	hashmap := make(map[int]int)
+	for i := 0; i < len(nums); i++ {
+		hashmap[nums[i]]++
+	}
+	//初始化堆，并把上面得到的hashmap对应的val和freq加入到堆中
+	h := &MinHeap{}
+	heap.Init(h)
+	for num, freq := range hashmap {
+		heap.Push(h, Element{num, freq})
+		if h.Len() > k {
+			heap.Pop(h)
+		}
+	}
+	//返回结果
+	res := []int{}
+	n := h.Len() //细节，因为h.Len()在下面的循环中不断减小
+	for i := 0; i < n; i++ {
+		res = append(res, heap.Pop(h).(Element).Value)
+	}
+	return res
+}
+
+// 建堆，要实现Len，Swap，Push，Pop，Less五个接口
+type Element struct {
+	Value     int
+	Frequency int
+}
+
+type MinHeap []Element
+
+func (h MinHeap) Len() int {
+	return len(h)
+}
+
+func (h MinHeap) Swap(i, j int) {
+	h[i], h[j] = h[j], h[i]
+}
+
+func (h MinHeap) Less(i, j int) bool {
+	return h[i].Frequency < h[j].Frequency //按频率排序
+}
+
+func (h *MinHeap) Push(x interface{}) {
+	*h = append(*h, x.(Element))
+}
+
+func (h *MinHeap) Pop() interface{} {
+	res := (*h)[len(*h)-1]
+	*h = (*h)[:len(*h)-1]
+	return res
+}
+
+/*
+121.买卖股票的最佳时机
+*/
+func MaxProfit(prices []int) int { //贪心算法
+	max_profit := 0
+	min_stock := math.MaxInt64
+	//就算当前的price非常非常小，且后面的price比现在的price大不了多少，那么max_profit还是之前计算的那个最大的profit
+	//就像是prices=[10,8,2,7,13,1,3],在更新了minstock后，max_profit依然是13-2，而不会是3-1
+	for _, price := range prices {
+		if price < min_stock {
+			min_stock = price
+		} else if price-min_stock > max_profit {
+			max_profit = price - min_stock
+		}
+	}
+	return max_profit
 }
