@@ -2087,3 +2087,147 @@ func MaxProfit(prices []int) int { //贪心算法
 	}
 	return max_profit
 }
+
+/*
+55.跳跃游戏
+*/
+func CanJump(nums []int) bool { //贪心
+	//对于nums，维护一个从当前元素最远可到达的位置即i+nums[i]
+	//如果当前最远可到达的位置大于等于len(nums)-1,那么说明可以到最后一个位置
+	//还需要保证当前的i是可以从前面跳到的
+	//其他情况就不能到达
+	max_dis := 0
+	for i := 0; i < len(nums)-1; i++ {
+		if i+nums[i] > max_dis && i <= max_dis {
+			max_dis = i + nums[i]
+		}
+	}
+	return max_dis >= len(nums)-1
+}
+
+/*
+45.跳跃游戏II
+*/
+func Jump(nums []int) int { //贪心
+	//从后往前找最小条约次数
+	//每次都贪心的选择距离最后一个位置最远的位置，也就是最小的下标
+	pos := len(nums) - 1
+	count := 0
+	for pos > 0 {
+		for i := 0; i < pos; i++ {
+			if nums[i]+i >= pos {
+				pos = i
+				count++
+				break
+			}
+		}
+	}
+	return count
+}
+
+/*
+763.划分字母区间
+*/
+func PartitionLabels(s string) []int { //贪心
+	//先初始化一个哈希表，用于记录当前字符串每个字符最后出现的位置
+	//准备切分，用一个start和end指针表示当前片段的开始和结尾
+	//每次都拿当前字符的最后一次出现的位置与max_end作比较
+	//当最后当前字符的位置已经等于max_end的时候，说明该片段所有的字符在后面都不会再出现，所以可以切分了
+	hashmap := map[byte]int{}
+	for index, ch := range s {
+		hashmap[byte(ch)] = index //注意这里如果用for-range循环那么取到的ch是rune类型，如果用for循环，取到的就是byte类型
+	}
+	start, end := 0, 0
+	max_end := 0
+	res := []int{}
+	for i := 0; i < len(s); i++ {
+		if hashmap[s[i]] > max_end {
+			max_end = hashmap[s[i]]
+		}
+		if i == max_end {
+			res = append(res, end-start+1)
+			start = end + 1
+		}
+		end++
+	}
+	return res
+}
+
+/*
+70.爬楼梯
+*/
+func ClimbStairs(n int) int {
+	//技巧的初始化方式
+	//这种初始化方式可以保证f(1)正好等于1
+	//p，q，r初始时分别代表f(-2),f(-1),f(0)
+	p, q, r := 0, 0, 1
+	for i := 1; i <= n; i++ {
+		p = q
+		q = r
+		r = p + q
+	}
+	return r
+}
+
+/*
+118.杨辉三角
+*/
+func Generate(numRows int) [][]int {
+	// f(1,1)=1
+	// f(2,1)=0+1=1=f(1,0)+f(1,1)
+	// f(2,2)=1+0=1=f(1,1)+f(1,2)
+	// f(3,1)=0+1=1=f(2,0)+f(2,1)
+	// f(3,2)=1+1=2=f(2,1)+f(2,2)
+	// f(3,3)=1+0=1=f(2,2)+f(2,3)
+	// f(i,j)=f(i-1,j-1)+f(i-1,j)
+	if numRows == 1 {
+		return [][]int{{1}}
+	}
+	if numRows == 2 {
+		return [][]int{{1}, {1, 1}}
+	}
+	res := [][]int{{1}, {1, 1}}
+	for i := 3; i <= numRows; i++ {
+		inter_res := []int{}
+		inter_res = append(inter_res, 1)
+		for j := 1; j <= i-2; j++ {
+			inter_res = append(inter_res, res[i-2][j-1]+res[i-2][j])
+		}
+		inter_res = append(inter_res, 1)
+		res = append(res, inter_res)
+	}
+	return res
+}
+
+/*
+198.打家劫舍
+*/
+func Rob(nums []int) int {
+	//如果nums的长度为0，那么输出就为0
+	//如果长度为1，那么输出为max(nums[0],nums[1])
+	//dp[i]=max(dp[i-2]+nums[i],dp[i-1])
+	if len(nums) == 0 {
+		return 0
+	}
+	if len(nums) == 1 {
+		return nums[0]
+	}
+	if len(nums) == 2 {
+		return max(nums[0], nums[1])
+	}
+	x, y := nums[0], max(nums[0], nums[1])
+	res := 0
+	for i := 2; i < len(nums); i++ {
+		res = max(x+nums[i], y)
+		x = y
+		y = res
+	}
+	return res
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}

@@ -65,3 +65,12 @@ leetcode hot100 解题代码及思路（使用go语言）
   - [215. 数组中的第K个最大元素](https://leetcode.cn/problems/kth-largest-element-in-an-array)（没太懂这个改进的快排算法）  
   - [347. 前 K 个高频元素](https://leetcode.cn/problems/top-k-frequent-elements)  
   - [121. 买卖股票的最佳时机](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock)
+
+- **2025.5.26** 今日完成六题：  
+  - [55. 跳跃游戏](https://leetcode.cn/problems/jump-game)  
+  - [45. 跳跃游戏 II](https://leetcode.cn/problems/jump-game-ii)  
+  - [763. 划分字母区间](https://leetcode.cn/problems/partition-labels)  
+  - [70. 爬楼梯](https://leetcode.cn/problems/climbing-stairs)  
+  - [118. 杨辉三角](https://leetcode.cn/problems/pascals-triangle)  
+  - [198. 打家劫舍](https://leetcode.cn/problems/house-robber)
+
