@@ -58,3 +58,10 @@ leetcode hot100 解题代码及思路（使用go语言）
   - [153. 寻找旋转排序数组中的最小值](https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array)  
   - [20. 有效的括号](https://leetcode.cn/problems/valid-parentheses)  
   - [155. 最小栈](https://leetcode.cn/problems/min-stack)
+
+- **2025.5.25** 今日完成五题：  
+  - [394. 字符串解码](https://leetcode.cn/problems/decode-string)  
+  - [739. 每日温度](https://leetcode.cn/problems/daily-temperatures)  
+  - [215. 数组中的第K个最大元素](https://leetcode.cn/problems/kth-largest-element-in-an-array)（没太懂这个改进的快排算法）  
+  - [347. 前 K 个高频元素](https://leetcode.cn/problems/top-k-frequent-elements)  
+  - [121. 买卖股票的最佳时机](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock)

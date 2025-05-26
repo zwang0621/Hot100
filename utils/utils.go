@@ -1927,6 +1927,63 @@ func (this *MinStack) GetMin() int {
 }
 
 /*
+394.字符串解码
+*/
+func DecodeString(s string) string { //栈
+	type Helper struct {
+		Multi int
+		Ch    string
+	}
+	res := ""
+	stack := []Helper{}
+	multi := 0
+	for _, ch := range s {
+		if ch == '[' {
+			stack = append(stack, Helper{
+				Multi: multi,
+				Ch:    res,
+			})
+			multi, res = 0, ""
+		} else if ch == ']' {
+			cur_multi, last_res := stack[len(stack)-1].Multi, stack[len(stack)-1].Ch
+			stack = stack[:len(stack)-1]
+			temp := ""
+			for i := 0; i < cur_multi; i++ { //不能像python一样直接用数字乘字符表示几个字符，需要显式调用for循环来拼接
+				temp += res
+			}
+			res = last_res + temp //顺序不能错
+		} else if '0' <= ch && ch <= '9' {
+			//从前往后从字符串顺序构造数字的方法，如123
+			multi = multi*10 + int(ch-'0') //注意不能直接用int(ch)，int(ch)表示的是0-9的ascii码，ch-'0'才是对应的数字
+		} else {
+			res += string(ch)
+		}
+	}
+	return res
+}
+
+/*
+739.每日温度
+*/
+func DailyTemperatures(temperatures []int) []int { //栈
+	//利用单调栈
+	stack := []int{}
+	res := make([]int, len(temperatures))
+	for i := 0; i < len(temperatures); i++ {
+		if len(stack) == 0 {
+			stack = append(stack, i)
+		} else {
+			for len(stack) > 0 && temperatures[i] > temperatures[stack[len(stack)-1]] {
+				res[stack[len(stack)-1]] = i - stack[len(stack)-1]
+				stack = stack[:len(stack)-1]
+			}
+			stack = append(stack, i)
+		}
+	}
+	return res
+}
+
+/*
 215. 数组中的第K个最大元素
 */
 func FindKthLargest(nums []int, k int) int { //堆
