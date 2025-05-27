@@ -2231,3 +2231,178 @@ func max(a, b int) int {
 	}
 	return b
 }
+
+/*
+279.完全平方数
+*/
+func NumSquares(n int) int { //数学 时间复杂度O（根号n） 空间复杂度O(1)
+	//四平方和定理
+	//任意一个正整数都可以被表示为至多四个正整数的平方和
+	//当且仅当 n不等于4^k×(8m+7) 时，n 可以被表示为至多三个正整数的平方和。因此，当 n=4^k×(8m+7) 时，n 只能被表示为四个正整数的平方和
+	if IsPerfectSquare(n) {
+		return 1
+	}
+	if CheckIs4(n) {
+		return 4
+	}
+	//返回2的情况就是这个数可以表示为a2+b2
+	for i := 1; i*i <= n-1; i++ {
+		a := n - i*i
+		if IsPerfectSquare(a) {
+			return 2
+		}
+	}
+	return 3
+}
+
+// 判断是否是完全平方数
+func IsPerfectSquare(y int) bool {
+	x := int(math.Sqrt(float64(y)))
+	if x*x == y {
+		return true
+	}
+	return false
+}
+
+// 判断定理内容，即可以表示为四个正整数平方和的情况
+func CheckIs4(n int) bool {
+	for n%4 == 0 {
+		n = n / 4
+	}
+	if (n-7)%8 == 0 {
+		return true
+	}
+	return false
+}
+
+/*
+322.零钱兑换
+*/
+func CoinChange(coins []int, amount int) int { //动态规划
+	//不会了就去看csdn收藏了该题的解法
+	F := make([]int, amount+1)
+	for i := 0; i < len(F); i++ {
+		F[i] = 9999999
+	}
+	F[0] = 0
+	for i := 1; i < len(F); i++ {
+		for _, coin := range coins {
+			if i >= coin {
+				F[i] = Min(F[i], F[i-coin]+1)
+			}
+		}
+	}
+	if F[amount] >= 9999999 {
+		return -1
+	}
+	return F[amount]
+}
+
+func Min(a, b int) int {
+	if a > b {
+		return b
+	}
+	return a
+}
+
+/*
+139.单词拆分
+*/
+func WordBreak(s string, wordDict []string) bool {
+	//F[i]表示以当前字母结尾的字符串可否被wordDict中的字符串表示
+	F := make([]bool, len(s)+1)
+	for i := 0; i < len(F); i++ {
+		F[i] = false
+	}
+	F[0] = true
+
+	word_dict := make(map[string]bool, len(wordDict))
+	for _, word := range wordDict {
+		word_dict[word] = true
+	}
+
+	for i := 0; i < len(F); i++ { //开始指针
+		for j := i + 1; j < len(F); j++ { //结束指针
+			if F[i] && word_dict[s[i:j]] {
+				F[j] = true
+			}
+		}
+	}
+	return F[len(F)-1]
+}
+
+/*
+300.最长递增子序列
+*/
+func LengthOfLIS(nums []int) int {
+	dp := make([]int, len(nums))
+	for i := 0; i < len(dp); i++ {
+		dp[i] = 1
+	}
+	for i := 1; i < len(dp); i++ {
+		max := 0
+		for j := 0; j < i; j++ {
+			if nums[i] <= nums[j] {
+				continue
+			} else {
+				if dp[j] > max {
+					max = dp[j]
+				}
+			}
+			dp[i] = max + 1
+		}
+	}
+	res := 0
+	for _, v := range dp {
+		if v > res {
+			res = v
+		}
+	}
+	return res
+}
+
+/*
+152.乘积最大子数组
+*/
+func MaxProduct(nums []int) int {
+	//每一个以nums[i]为结尾的乘积最大的非空连续子数组的值记为dp[i]
+	//dp[i]=max(dp[i-1]*nums[i],nums[i])，因为nums[i]可能是负数
+	//但是如果遇到特例，比如nums=[1,3,-2,9,-5]，那么上式会失效，因为存在偶数个负数
+	//所以还需记录一个以nums[i]为结尾的乘积最小的非空连续子数组的值记为dp[i]
+	if len(nums) == 0 {
+		return 0
+	}
+	max_dp := nums[0]
+	min_dp := nums[0]
+	res := nums[0]
+	for i := 1; i < len(nums); i++ {
+		prev_max := max_dp
+		prev_min := min_dp
+		max_dp = max(nums[i], max(prev_max*nums[i], prev_min*nums[i]))
+		min_dp = min(nums[i], min(prev_max*nums[i], prev_min*nums[i]))
+		res = max(res, max_dp)
+	}
+	return res
+}
+
+/*
+416.分割等和子集
+*/
+func CanPartition(nums []int) bool {
+	sum := 0
+	for _, num := range nums {
+		sum += num
+	}
+	if sum%2 != 0 {
+		return false
+	}
+	target := sum / 2
+	dp := make([]bool, target+1) //dp[i]表示当前的数字是否可以由几个数凑出来
+	dp[0] = true
+	for _, num := range nums {
+		for i := target; i >= num; i-- {
+			dp[i] = dp[i] || dp[i-num]
+		}
+	}
+	return dp[target]
+}

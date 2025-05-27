@@ -74,3 +74,10 @@ leetcode hot100 解题代码及思路（使用go语言）
   - [118. 杨辉三角](https://leetcode.cn/problems/pascals-triangle)  
   - [198. 打家劫舍](https://leetcode.cn/problems/house-robber)
 
+- **2025.5.27** 今日完成六题：  
+  - [279. 完全平方数](https://leetcode.cn/problems/perfect-squares)  
+  - [322. 零钱兑换](https://leetcode.cn/problems/coin-change)  
+  - [139. 单词拆分](https://leetcode.cn/problems/word-break)  
+  - [300. 最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence)  
+  - [152. 乘积最大子数组](https://leetcode.cn/problems/maximum-product-subarray)  
+  - [416. 分割等和子集](https://leetcode.cn/problems/partition-equal-subset-sum)

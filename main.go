@@ -50,6 +50,8 @@ func main() {
 	// nums := []int{1, 3, 5, 6}
 	// target := 7
 	// fmt.Println(utils.SearchInsert(nums, target))
-	s := "()"
-	fmt.Println(utils.IsValid(s))
+	// s := "()"
+	// fmt.Println(utils.IsValid(s))
+	nums := []int{10, 9, 2, 5, 3, 7, 101, 18}
+	fmt.Println(utils.LengthOfLIS(nums))
 }
