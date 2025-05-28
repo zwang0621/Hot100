@@ -81,3 +81,10 @@ leetcode hot100 解题代码及思路（使用go语言）
   - [300. 最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence)  
   - [152. 乘积最大子数组](https://leetcode.cn/problems/maximum-product-subarray)  
   - [416. 分割等和子集](https://leetcode.cn/problems/partition-equal-subset-sum)
+
+- **2025.5.28** 今日完成五题：  
+  - [136. 只出现一次的数字](https://leetcode.cn/problems/single-number)  
+  - [169. 多数元素](https://leetcode.cn/problems/majority-element)  
+  - [75. 颜色分类](https://leetcode.cn/problems/sort-colors)  
+  - [31. 下一个排列](https://leetcode.cn/problems/next-permutation)（云里雾里，没太看懂）
+  - [287. 寻找重复数](https://leetcode.cn/problems/find-the-duplicate-number)

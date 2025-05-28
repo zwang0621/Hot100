@@ -2406,3 +2406,114 @@ func CanPartition(nums []int) bool {
 	}
 	return dp[target]
 }
+
+/*
+136.只出现一次的数字
+*/
+func SingleNumber(nums []int) int {
+	//任何数和 0 做异或运算，结果仍然是原来的数，即 a⊕0=a。
+	//任何数和其自身做异或运算，结果是 0，即 a⊕a=0。
+	//异或运算满足交换律和结合律，即 a⊕b⊕a=b⊕a⊕a=b⊕(a⊕a)=b⊕0=b
+	//所以nums中的所有数进行异或操作得到的就是只出现一次的数字
+	res := 0
+	for _, num := range nums {
+		res = res ^ num
+	}
+	return res
+}
+
+/*
+169.多数元素
+*/
+func MajorityElement(nums []int) int {
+	//摩尔投票法 因为多数元素的count一定大于其他元素的count
+	//随机选择一个候选数candidate，维护candidate和count
+	//如果当前数字==candidate，那么count++
+	//否则count--，当count==0时，选择当前数字作为candidate
+	count := 0
+	var candidate int
+	for _, num := range nums {
+		if count == 0 {
+			candidate = num
+		}
+		if num == candidate {
+			count++
+		} else {
+			count--
+		}
+	}
+	return candidate
+}
+
+/*
+75.颜色分类
+*/
+func SortColors(nums []int) {
+	p0, p1 := 0, 0 //指向0和指向1的指针
+	for i := 0; i < len(nums); i++ {
+		if nums[i] == 0 {
+			nums[p0], nums[i] = nums[i], nums[p0]
+			if p0 < p1 { //说明已经有1被放到了前面
+				nums[i], nums[p1] = nums[p1], nums[i]
+			}
+			p0++
+			p1++ //p1也需要后移，因为如果不移动的话后面的1会和现在的0交换位置
+		} else if nums[i] == 1 {
+			nums[p1], nums[i] = nums[i], nums[p1]
+			p1++
+		}
+	}
+}
+
+/*
+31.下一个排列
+*/
+func NextPermutation(nums []int) {
+	if len(nums) <= 1 {
+		return
+	}
+
+	i, j, k := len(nums)-2, len(nums)-1, len(nums)-1
+
+	// find: A[i]<A[j]
+	for i >= 0 && nums[i] >= nums[j] {
+		i--
+		j--
+	}
+
+	if i >= 0 { // 不是最后一个排列
+		// find: A[i]<A[k]
+		for nums[i] >= nums[k] {
+			k--
+		}
+		// swap A[i], A[k]
+		nums[i], nums[k] = nums[k], nums[i]
+	}
+
+	// reverse A[j:end]
+	for i, j := j, len(nums)-1; i < j; i, j = i+1, j-1 {
+		nums[i], nums[j] = nums[j], nums[i]
+	}
+}
+
+/*
+287.寻找重复数
+*/
+func FindDuplicate(nums []int) int {
+	slow := nums[0]
+	fast := nums[0]
+	for {
+		slow = nums[slow]       //慢指针每次走一步
+		fast = nums[nums[fast]] //快指针每次走两步
+		if slow == fast {       //因为有环，快慢指针一定能相遇
+			break
+		}
+	}
+	//slow从头出发，fast从当前位置出发，再相遇的位置就是入环处
+	slow = nums[0]
+	for slow != fast {
+		slow = nums[slow]
+		fast = nums[fast]
+	}
+	return slow
+}
