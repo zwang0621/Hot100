@@ -2517,3 +2517,89 @@ func FindDuplicate(nums []int) int {
 	}
 	return slow
 }
+
+/*
+5.最长回文子串
+*/
+func LongestPalindrome(s string) string { //多维动态规划
+	//二维动态规划
+	//状态转移方程为s[i,j]=s[i]==s[j]&&s[i+1,j-1]
+	//循环条件要注意i是从大到小，而j是从小到大
+	n := len(s)
+	if n < 2 {
+		return s
+	}
+	dp := make([][]bool, n)
+	for i := 0; i < n; i++ {
+		dp[i] = make([]bool, n)
+		dp[i][i] = true //初始化时所有当前单个字符都是回文
+	}
+	longest := 1
+	start := 0
+	for i := n - 1; i >= 0; i-- {
+		for j := i + 1; j < n; j++ {
+			if s[i] == s[j] && dp[i+1][j-1] || s[i] == s[j] && j-i == 1 {
+				dp[i][j] = true
+				if j-i+1 > longest {
+					longest = j - i + 1
+					start = i
+				}
+			}
+		}
+	}
+	return s[start : start+longest]
+}
+
+/*
+912.排序数组
+*/
+func sortArray(nums []int) []int { //手撕快排
+	quicksort(nums, 0, len(nums)-1)
+	return nums
+}
+
+func partition(nums []int, left, right int) int {
+	pivot := nums[(left+right)/2]
+	l, r := left-1, right+1
+	for l < r {
+		for l++; nums[l] < pivot; l++ {
+		}
+		for r--; nums[r] > pivot; r-- {
+		}
+		if l < r {
+			nums[l], nums[r] = nums[r], nums[l]
+		}
+	}
+	return r
+}
+
+func quicksort(nums []int, left, right int) {
+	if left >= right {
+		return
+	}
+	pivot_index := partition(nums, left, right)
+	quicksort(nums, left, pivot_index)
+	quicksort(nums, pivot_index+1, right)
+}
+
+/*
+88.合并两个有序数组
+*/
+func Merge2(nums1 []int, m int, nums2 []int, n int) {
+	i, j, k := m-1, n-1, m+n-1
+	for i >= 0 && j >= 0 {
+		if nums1[i] > nums2[j] {
+			nums1[k] = nums1[i]
+			i--
+		} else {
+			nums1[k] = nums2[j]
+			j--
+		}
+		k--
+	}
+	for j >= 0 {
+		nums1[k] = nums2[j]
+		k--
+		j--
+	}
+}

@@ -88,3 +88,8 @@ leetcode hot100 解题代码及思路（使用go语言）
   - [75. 颜色分类](https://leetcode.cn/problems/sort-colors)  
   - [31. 下一个排列](https://leetcode.cn/problems/next-permutation)（云里雾里，没太看懂）
   - [287. 寻找重复数](https://leetcode.cn/problems/find-the-duplicate-number)
+
+- **2025.6.1** 补充三道题：  
+  - [88. 合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array)  
+  - [912. 排序数组](https://leetcode.cn/problems/sort-an-array)  
+  - [5. 最长回文子串](https://leetcode.cn/problems/longest-palindromic-substring)
