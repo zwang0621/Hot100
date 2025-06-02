@@ -2603,3 +2603,58 @@ func Merge2(nums1 []int, m int, nums2 []int, n int) {
 		j--
 	}
 }
+
+/*
+103.二叉树的锯齿形层序遍历
+*/
+func ZigzagLevelOrder(root *TreeNode) [][]int {
+	if root == nil {
+		return [][]int{}
+	}
+	if root.Left == nil && root.Right == nil {
+		return [][]int{{root.Val}}
+	}
+	res := [][]int{{root.Val}}
+	inter_res := []int{}
+	queue := [][]*TreeNode{{root}}
+	inter_queue := []*TreeNode{}
+	for len(queue) > 0 {
+		for i := 0; i < len(queue[0]); i++ {
+			node := queue[0][i]
+			if node.Left != nil {
+				inter_queue = append(inter_queue, node.Left)
+				inter_res = append(inter_res, node.Left.Val)
+			}
+			if node.Right != nil {
+				inter_queue = append(inter_queue, node.Right)
+				inter_res = append(inter_res, node.Right.Val)
+			}
+		}
+		if len(inter_queue) > 0 {
+			queue = append(queue, inter_queue)
+			res = append(res, inter_res)
+		}
+		inter_queue = []*TreeNode{}
+		inter_res = []int{}
+		queue = queue[1:]
+	}
+	index := 0
+	final_res := [][]int{}
+	for i := 0; i < len(res); i++ {
+		if index%2 == 0 {
+			final_res = append(final_res, res[i])
+		} else {
+			reverseSlice(res[i])
+			final_res = append(final_res, res[i])
+		}
+		index++
+	}
+	return final_res
+}
+
+// 原地逆序一个切片的方法
+func reverseSlice(s []int) {
+	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
+		s[i], s[j] = s[j], s[i]
+	}
+}
