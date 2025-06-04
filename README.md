@@ -96,3 +96,7 @@ leetcode hot100 解题代码及思路（使用go语言）
 
 - **2025.6.2** 补充一道题：  
   - [103. 二叉树的锯齿形层序遍历](https://leetcode.cn/problems/binary-tree-zigzag-level-order-traversal)
+
+- **2025.6.4** 补充两道题：  
+  - [92. 反转链表 II](https://leetcode.cn/problems/reverse-linked-list-ii)  
+  - [415. 字符串相加](https://leetcode.cn/problems/add-strings)

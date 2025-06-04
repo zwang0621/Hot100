@@ -2658,3 +2658,60 @@ func reverseSlice(s []int) {
 		s[i], s[j] = s[j], s[i]
 	}
 }
+
+/*
+92.反转链表II
+*/
+func ReverseBetween(head *ListNode, left int, right int) *ListNode {
+	curr := head
+	dummy_node := &ListNode{}
+	prev := dummy_node
+	prev.Next = head
+	index := 1
+	for index < left {
+		prev = curr
+		curr = curr.Next
+		index++
+	}
+	next := curr.Next
+	for i := 0; i < right-left; i++ {
+		curr.Next = next.Next
+		next.Next = prev.Next
+		prev.Next = next
+		next = curr.Next
+	}
+	return dummy_node.Next
+}
+
+/*
+415.字符串相加
+*/
+func AddStrings(num1 string, num2 string) string {
+	jinwei := 0
+	last_num1_idx := len(num1) - 1
+	last_num2_idx := len(num2) - 1
+	new_num := ""
+	for last_num1_idx >= 0 || last_num2_idx >= 0 || jinwei > 0 {
+		//这里巧妙地声明n1，n2，和下面的判断逻辑相呼应，就不要显式的补0了
+		var n1, n2 int
+		if last_num1_idx >= 0 {
+			n1 = int(num1[last_num1_idx] - '0')
+			last_num1_idx--
+		}
+		if last_num2_idx >= 0 {
+			n2 = int(num2[last_num2_idx] - '0')
+			last_num2_idx--
+		}
+		sum := n1 + n2 + jinwei
+		jinwei = sum / 10
+		sum = sum % 10
+		new_num += string('0' + byte(sum))
+	}
+	//因为字符串是不可变的，所以要先转化成字符切片，逆置后再转换为string
+	inter_res := []byte(new_num)
+	for i, j := 0, len(new_num)-1; i < j; i, j = i+1, j-1 {
+		inter_res[i], inter_res[j] = inter_res[j], inter_res[i]
+	}
+	new_num = string(inter_res)
+	return new_num
+}
