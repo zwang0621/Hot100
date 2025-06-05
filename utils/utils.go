@@ -2715,3 +2715,89 @@ func AddStrings(num1 string, num2 string) string {
 	new_num = string(inter_res)
 	return new_num
 }
+
+/*
+143.重排链表
+*/
+func middlenode(head *ListNode) *ListNode {
+	slow := head
+	fast := head
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+	return slow
+}
+
+func reverselist(head *ListNode) *ListNode {
+	p := &ListNode{}
+	p.Next = nil
+	q := head
+	for q != nil {
+		next := q.Next
+		q.Next = p.Next
+		p.Next = q
+		q = next
+	}
+	return p.Next
+}
+
+func mergelist(l1, l2 *ListNode) *ListNode {
+	dummy_node := &ListNode{}
+	dummy_node.Next = l1
+	p := l1
+	q := l2
+	next_p := p.Next
+	next_q := q.Next
+	for p != nil && q != nil {
+		q.Next = p.Next
+		p.Next = q
+		p = next_p
+		q = next_q
+		if next_p != nil {
+			next_p = next_p.Next
+		}
+		if next_q != nil {
+			next_q = next_q.Next
+		}
+	}
+	return dummy_node.Next
+}
+
+func ReorderList(head *ListNode) {
+	if head.Next == nil || head.Next.Next == nil {
+		return
+	}
+	//结果链表即为原链表左半边拼接逆序的原链表右半边
+	//1.先找中间节点
+	//2.逆序从中间节点开始的后半部分，注意逆序前要断开链表
+	//3.合并链表
+	Middle := middlenode(head)
+	second := Middle.Next
+	Middle.Next = nil
+	q := reverselist(second)
+	mergelist(head, q)
+}
+
+/*
+1143.最长公共子序列
+*/
+func LongestCommonSubsequence(text1 string, text2 string) int { //二维动态规划
+	//dp[i][j]表示text1的前i个字符与text2的前j个字符的最长公共子序列
+	m := len(text1)
+	n := len(text2)
+	dp := make([][]int, m+1)
+	for i := range dp {
+		dp[i] = make([]int, n+1)
+	}
+	for i := 1; i <= m; i++ {
+		for j := 1; j <= n; j++ {
+			if text1[i-1] == text2[j-1] { //一定注意这里是i-1和j-1，因为dp分别表示是前i个前j个，而字符串索引从0开始
+				dp[i][j] = dp[i-1][j-1] + 1
+			} else {
+				dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+			}
+		}
+	}
+	return dp[m][n]
+}

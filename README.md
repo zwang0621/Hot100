@@ -100,3 +100,7 @@ leetcode hot100 解题代码及思路（使用go语言）
 - **2025.6.4** 补充两道题：  
   - [92. 反转链表 II](https://leetcode.cn/problems/reverse-linked-list-ii)  
   - [415. 字符串相加](https://leetcode.cn/problems/add-strings)
+
+- **2025.6.5** 补充两道题：  
+  - [143. 重排链表](https://leetcode.cn/problems/reorder-list)  
+  - [1143. 最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence)
