@@ -104,3 +104,7 @@ leetcode hot100 解题代码及思路（使用go语言）
 - **2025.6.5** 补充两道题：  
   - [143. 重排链表](https://leetcode.cn/problems/reorder-list)  
   - [1143. 最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence)
+
+- **2025.6.6** 补充19. 删除链表的倒数第 N 个结点的最佳解法及一道题：  
+  - [19. 删除链表的倒数第 N 个结点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list)  
+  - [82. 删除排序链表中的重复元素 II](https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii)

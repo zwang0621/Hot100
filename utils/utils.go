@@ -955,6 +955,31 @@ func RemoveNthFromEnd2(head *ListNode, n int) *ListNode { //链表 方法二 时
 	return head
 }
 
+func RemoveNthFromEnd3(head *ListNode, n int) *ListNode { //链表 方法三 时间复杂度O(n) 空间复杂度O(1)
+	//时间复杂度O(n),空间复杂度O(1)
+	//一次遍历，快慢指针
+	//开始时快指针与慢指针之间间隔n个节点
+	slow := &ListNode{}
+	slow.Next = head
+	fast := head
+	for n > 0 {
+		fast = fast.Next
+		n--
+	}
+	//一种特殊情况此时fast已经为nil了，说明删除的就是第一个节点
+	if fast == nil {
+		slow.Next = slow.Next.Next
+		return slow.Next
+	}
+	for fast != nil {
+		slow = slow.Next
+		fast = fast.Next
+	}
+	//这时slow就指向待删除节点的前一个结点
+	slow.Next = slow.Next.Next
+	return head
+}
+
 /*
 24.两两交换链表中的节点
 */
@@ -2800,4 +2825,35 @@ func LongestCommonSubsequence(text1 string, text2 string) int { //二维动态�
 		}
 	}
 	return dp[m][n]
+}
+
+/*
+82. 删除排序链表中的重复元素 II
+*/
+func DeleteDuplicates(head *ListNode) *ListNode {
+	if head == nil {
+		return nil
+	}
+	prev := &ListNode{}
+	prev.Next = head
+	dummy_node := prev
+	p := head
+	q := head.Next
+	for q != nil {
+		if p.Val == q.Val {
+			for q != nil && q.Val == p.Val {
+				q = q.Next
+			}
+			prev.Next = q
+			p = q
+			if q != nil {
+				q = q.Next
+			}
+		} else {
+			prev = p
+			p = q
+			q = q.Next
+		}
+	}
+	return dummy_node.Next
 }
