@@ -2857,3 +2857,96 @@ func DeleteDuplicates(head *ListNode) *ListNode {
 	}
 	return dummy_node.Next
 }
+
+/*
+232. 用栈实现队列
+*/
+type MyQueue struct {
+	stack1 []int
+	stack2 []int
+}
+
+func Constructor4() MyQueue {
+	my_queue := MyQueue{
+		stack1: []int{},
+		stack2: []int{},
+	}
+	return my_queue
+}
+
+func (this *MyQueue) Push(x int) {
+	this.stack1 = append(this.stack1, x)
+}
+
+func (this *MyQueue) in2out() {
+	for len(this.stack1) > 0 {
+		this.stack2 = append(this.stack2, this.stack1[len(this.stack1)-1])
+		this.stack1 = this.stack1[0 : len(this.stack1)-1]
+	}
+}
+
+func (this *MyQueue) Pop() int {
+	if len(this.stack2) == 0 {
+		this.in2out()
+	}
+	x := this.stack2[len(this.stack2)-1]
+	this.stack2 = this.stack2[0 : len(this.stack2)-1]
+	return x
+}
+
+func (this *MyQueue) Peek() int {
+	if len(this.stack2) == 0 {
+		this.in2out()
+	}
+	return this.stack2[len(this.stack2)-1]
+}
+
+func (this *MyQueue) Empty() bool {
+	return len(this.stack1) == 0 && len(this.stack2) == 0
+}
+
+/*
+165. 比较版本号
+*/
+func CompareVersion(version1 string, version2 string) int {
+	m, n := len(version1), len(version2)
+	i, j := 0, 0
+	for i < m || j < n {
+		res1, res2 := 0, 0
+		for ; i < m && version1[i] != '.'; i++ {
+			res1 = res1*10 + int(version1[i]-'0')
+			fmt.Println(res1)
+		}
+		i++
+		for ; j < n && version2[j] != '.'; j++ {
+			res2 = res2*10 + int(version2[j]-'0')
+			fmt.Println(res2)
+		}
+		j++
+		if res1 > res2 {
+			return 1
+		}
+		if res2 > res1 {
+			return -1
+		}
+	}
+	return 0
+}
+
+/*
+69. x 的平方根
+*/
+func MySqrt(x int) int {
+	left, right := 1, x
+	for left <= right {
+		mid := (left + right) / 2
+		if mid*mid == x {
+			return mid
+		} else if mid*mid < x {
+			left = mid + 1
+		} else {
+			right = mid - 1
+		}
+	}
+	return right
+}

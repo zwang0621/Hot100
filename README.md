@@ -108,3 +108,8 @@ leetcode hot100 解题代码及思路（使用go语言）
 - **2025.6.6** 补充19. 删除链表的倒数第 N 个结点的最佳解法及一道题：  
   - [19. 删除链表的倒数第 N 个结点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list)  
   - [82. 删除排序链表中的重复元素 II](https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii)
+
+- **2025.6.8** 补充三道题：  
+  - [232. 用栈实现队列](https://leetcode.cn/problems/implement-queue-using-stacks)  
+  - [165. 比较版本号](https://leetcode.cn/problems/compare-version-numbers)
+  - [69. x的平方根](https://leetcode.cn/problems/sqrtx)
