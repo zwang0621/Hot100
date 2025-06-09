@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 	"sort"
+	"strconv"
 )
 
 /*
@@ -2949,4 +2950,145 @@ func MySqrt(x int) int {
 		}
 	}
 	return right
+}
+
+/*
+8. 字符串转换整数 (atoi)
+*/
+func MyAtoi(s string) int {
+	res := 0
+	pos_flag := []int{}
+	neg_flag := []int{}
+	count := 0
+	started := false
+	for i := 0; i < len(s); i++ {
+		if !started {
+			if s[i] == ' ' {
+				continue
+			} else if s[i] == '-' && count == 0 {
+				neg_flag = append(neg_flag, 0)
+				started = true
+			} else if s[i] == '+' && count == 0 {
+				pos_flag = append(pos_flag, 1)
+				started = true
+			} else if s[i] >= '0' && s[i] <= '9' {
+				res = int(s[i] - '0')
+				started = true
+				count += 1
+			} else {
+				break
+			}
+		} else {
+			//不能在最后判断是否超过了int32的最大值，而是要在每一次计算res的时候判断
+			//因为如果最后再判断可能res已经越界了，从正数变成负数，或者从负数变成正数
+			if s[i] >= '0' && s[i] <= '9' {
+				digit := int(s[i] - '0')
+				sign := 1
+				if len(neg_flag) > 0 {
+					sign = -1
+				}
+				if res > math.MaxInt32/10 || (res == math.MaxInt32/10 && digit > 7) {
+					if sign == 1 {
+						return math.MaxInt32
+					} else {
+						return math.MinInt32
+					}
+				}
+				res = res*10 + digit
+			} else {
+				break
+			}
+		}
+	}
+	if len(pos_flag) >= 1 && len(neg_flag) >= 1 {
+		return 0
+	}
+	if len(neg_flag) > 0 {
+		return -res
+	}
+	return res
+}
+
+/*
+43. 字符串相乘
+*/
+func Multiply(num1 string, num2 string) string {
+	if num1 == "0" || num2 == "0" {
+		return "0"
+	}
+	m, n := len(num1)-1, len(num2)-1
+	ans := "0"
+	for j := n; j >= 0; j-- {
+		jinwei := 0
+		curr := ""
+		x := int(num2[j] - '0')
+		//补零操作
+		for k := 0; k < n-j; k++ {
+			curr += "0"
+		}
+		for i := m; i >= 0; i-- {
+			y := int(num1[i] - '0')
+			res := x*y + jinwei
+			jinwei = res / 10
+			res = res % 10
+			curr = strconv.Itoa(res) + curr
+		}
+		//每次乘法完后可能还有多余的进位，比如jinwei=12，这里一定在下面加上%10,否则就不是一位一位的加，而会多加
+		for ; jinwei != 0; jinwei = jinwei / 10 {
+			curr = strconv.Itoa(jinwei%10) + curr
+		}
+		ans = add(ans, curr)
+	}
+	return ans
+}
+
+// 返回两个字符串相加的结果
+// 9999999
+//
+//	9999
+func add(num1 string, num2 string) string {
+	m, n := len(num1)-1, len(num2)-1
+	res := []byte{}
+	jinwei := 0
+	for m >= 0 && n >= 0 {
+		add_res := int(num1[m]-'0') + int(num2[n]-'0') + jinwei
+		if add_res >= 10 {
+			add_res = add_res % 10
+			jinwei = 1
+		} else {
+			jinwei = 0
+		}
+		res = append(res, '0'+byte(add_res))
+		m--
+		n--
+	}
+	for m >= 0 {
+		add_res := int(num1[m]-'0') + jinwei
+		if add_res >= 10 {
+			add_res = add_res % 10
+			jinwei = 1
+		} else {
+			jinwei = 0
+		}
+		res = append(res, '0'+byte(add_res))
+		m--
+	}
+	for n >= 0 {
+		add_res := int(num2[n]-'0') + jinwei
+		if add_res >= 10 {
+			add_res = add_res % 10
+			jinwei = 1
+		} else {
+			jinwei = 0
+		}
+		res = append(res, '0'+byte(add_res))
+		n--
+	}
+	if jinwei != 0 {
+		res = append(res, '1')
+	}
+	for i, j := 0, len(res)-1; i < j; i, j = i+1, j-1 {
+		res[i], res[j] = res[j], res[i]
+	}
+	return string(res)
 }

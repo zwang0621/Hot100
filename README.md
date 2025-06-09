@@ -113,3 +113,7 @@ leetcode hot100 解题代码及思路（使用go语言）
   - [232. 用栈实现队列](https://leetcode.cn/problems/implement-queue-using-stacks)  
   - [165. 比较版本号](https://leetcode.cn/problems/compare-version-numbers)
   - [69. x的平方根](https://leetcode.cn/problems/sqrtx)
+
+- **2025.6.9** 补充两道题：  
+  - [8. 字符串转换整数 (atoi)](https://leetcode.cn/problems/string-to-integer-atoi)  
+  - [43. 字符串相乘](https://leetcode.cn/problems/multiply-strings)
