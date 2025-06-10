@@ -1,5 +1,10 @@
 package main
 
+import (
+	"Hot100_go/utils"
+	"fmt"
+)
+
 func main() {
 	// fmt.Println(utils.TwoSum([]int{3, 2, 4}, 6))
 	// nums := []int{0, 1}
@@ -47,6 +52,7 @@ func main() {
 	// fmt.Println(utils.SearchInsert(nums, target))
 	// s := "()"
 	// fmt.Println(utils.IsValid(s))
-	nums := []int{1, 3, 6, 7, 9, 4, 10, 5, 6}
-
+	//nums := []int{1, 3, 6, 7, 9, 4, 10, 5, 6}
+	s := "  Bob    Loves  Alice   "
+	fmt.Println(utils.ReverseWords(s))
 }

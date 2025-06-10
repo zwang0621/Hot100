@@ -117,3 +117,8 @@ leetcode hot100 解题代码及思路（使用go语言）
 - **2025.6.9** 补充两道题：  
   - [8. 字符串转换整数 (atoi)](https://leetcode.cn/problems/string-to-integer-atoi)  
   - [43. 字符串相乘](https://leetcode.cn/problems/multiply-strings)
+
+- **2025.6.10** 补充三道题：  
+  - [151. 反转字符串中的单词](https://leetcode.cn/problems/reverse-words-in-a-string)  
+  - [78. 子集](https://leetcode.cn/problems/subsets)（全排列，子集，括号生成这些回溯题直接套模板，但是要搞清楚题目的具体情况，包括判断条件，backtrack函数的定义，另外中间结果是否需要拷贝也需要具体分析）
+  - [22. 括号生成](https://leetcode.cn/problems/generate-parentheses)

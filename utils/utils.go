@@ -3092,3 +3092,85 @@ func add(num1 string, num2 string) string {
 	}
 	return string(res)
 }
+
+/*
+151. 反转字符串中的单词
+*/
+func ReverseWords(s string) string {
+	s_slice := []string{}
+	i := 0
+	for i < len(s) {
+		if s[i] == ' ' {
+			i++
+			continue
+		}
+		if s[i] >= 'A' && s[i] <= 'z' || s[i] >= '0' && s[i] <= '9' {
+			start := i
+			for i < len(s) && s[i] != ' ' {
+				i++
+			}
+			end := i
+			s_slice = append(s_slice, s[start:end])
+		}
+	}
+	res := ""
+	for j := len(s_slice) - 1; j >= 0; j-- {
+		res += s_slice[j]
+		if j != 0 {
+			res += " "
+		}
+	}
+	return res
+}
+
+/*
+78. 子集
+*/
+func Subsets(nums []int) [][]int {
+	res := [][]int{}
+	inter_res := []int{}
+	var backtrack func(start int)
+	backtrack = func(start int) {
+		inter_res_copy := make([]int, len(inter_res))
+		copy(inter_res_copy, inter_res)
+		res = append(res, inter_res_copy)
+
+		for i := start; i < len(nums); i++ {
+			inter_res = append(inter_res, nums[i])
+			backtrack(i + 1)
+			inter_res = inter_res[:len(inter_res)-1]
+		}
+	}
+	backtrack(0)
+	return res
+}
+
+/*
+22.括号生成
+*/
+func GenerateParenthesis(n int) []string {
+	//左括号小于n就可以添加左括号
+	//右括号小于左括号就可以添加右括号
+	//其他情况都是非法的
+	res := []string{}
+	inter_res := []byte{}
+	var backtrack func(left, right int)
+	backtrack = func(left, right int) {
+		//这里就不需要copy一个inter_res出来，因为我们不是直接把inter_res加到res里面，而是把字符串添加进去
+		if len(inter_res) == 2*n {
+			res = append(res, string(inter_res))
+		}
+		if left < n {
+			inter_res = append(inter_res, '(')
+			backtrack(left+1, right)
+			inter_res = inter_res[:len(inter_res)-1]
+		}
+		if right < left {
+			inter_res = append(inter_res, ')')
+			backtrack(left, right+1)
+			inter_res = inter_res[:len(inter_res)-1]
+		}
+	}
+	backtrack(0, 0)
+	return res
+}
