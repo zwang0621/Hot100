@@ -2579,12 +2579,12 @@ func LongestPalindrome(s string) string { //多维动态规划
 /*
 912.排序数组
 */
-func sortArray(nums []int) []int { //手撕快排
-	quicksort(nums, 0, len(nums)-1)
+func SortArray(nums []int) []int { //手撕快排
+	Quicksort(nums, 0, len(nums)-1)
 	return nums
 }
 
-func partition(nums []int, left, right int) int {
+func Partition(nums []int, left, right int) int {
 	pivot := nums[(left+right)/2]
 	l, r := left-1, right+1
 	for l < r {
@@ -2599,13 +2599,13 @@ func partition(nums []int, left, right int) int {
 	return r
 }
 
-func quicksort(nums []int, left, right int) {
+func Quicksort(nums []int, left, right int) {
 	if left >= right {
 		return
 	}
-	pivot_index := partition(nums, left, right)
-	quicksort(nums, left, pivot_index)
-	quicksort(nums, pivot_index+1, right)
+	pivot_index := Partition(nums, left, right)
+	Quicksort(nums, left, pivot_index)
+	Quicksort(nums, pivot_index+1, right)
 }
 
 /*
@@ -3173,4 +3173,79 @@ func GenerateParenthesis(n int) []string {
 	}
 	backtrack(0, 0)
 	return res
+}
+
+/*
+129. 求根节点到叶节点数字之和
+*/
+func SumNumbers(root *TreeNode) int {
+	num, sum := 0, 0
+	var dfs func(root *TreeNode)
+	dfs = func(root *TreeNode) {
+		if root == nil {
+			return
+		}
+		num = num*10 + root.Val
+		if root.Left == nil && root.Right == nil {
+			sum += num
+		}
+		dfs(root.Left)
+		dfs(root.Right)
+		num = (num - root.Val) / 10
+	}
+	dfs(root)
+	return sum
+}
+
+/*
+144. 二叉树先序遍历
+*/
+func PreorderTraversal1(root *TreeNode) []int { //非递归 颜色标记法 用栈
+	if root == nil {
+		return []int{}
+	}
+	white, grey := 0, 1
+	type colornode struct {
+		Node  *TreeNode
+		Color int
+	}
+	vis := []colornode{{Node: root, Color: white}}
+	res := []int{}
+	for len(vis) > 0 {
+		n := vis[len(vis)-1]
+		vis = vis[:len(vis)-1]
+		if n.Node == nil {
+			continue
+		}
+		if n.Color == white {
+			vis = append(vis, colornode{n.Node.Right, white})
+			vis = append(vis, colornode{n.Node.Left, white})
+			vis = append(vis, colornode{n.Node, grey})
+		} else {
+			res = append(res, n.Node.Val)
+		}
+	}
+	return res
+}
+
+func PreorderTraversal2(root *TreeNode) []int { //递归
+	if root == nil {
+		return []int{}
+	}
+	res := &[]int{}
+	var preorder func(root *TreeNode, res *[]int)
+	preorder = func(root *TreeNode, res *[]int) {
+		if root == nil {
+			return
+		}
+		*res = append(*res, root.Val)
+		if root.Left != nil {
+			preorder(root.Left, res)
+		}
+		if root.Right != nil {
+			preorder(root.Right, res)
+		}
+	}
+	preorder(root, res)
+	return *res
 }

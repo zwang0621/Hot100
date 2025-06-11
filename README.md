@@ -122,3 +122,7 @@ leetcode hot100 解题代码及思路（使用go语言）
   - [151. 反转字符串中的单词](https://leetcode.cn/problems/reverse-words-in-a-string)  
   - [78. 子集](https://leetcode.cn/problems/subsets)（全排列，子集，括号生成这些回溯题直接套模板，但是要搞清楚题目的具体情况，包括判断条件，backtrack函数的定义，另外中间结果是否需要拷贝也需要具体分析）
   - [22. 括号生成](https://leetcode.cn/problems/generate-parentheses)
+
+- **2025.6.11** 补充两道树的题：  
+  - [129. 求根节点到叶节点数字之和](https://leetcode.cn/problems/sum-root-to-leaf-numbers)  
+  - [144. 二叉树先序遍历](https://leetcode.cn/problems/binary-tree-preorder-traversal)
