@@ -3249,3 +3249,68 @@ func PreorderTraversal2(root *TreeNode) []int { //递归
 	preorder(root, res)
 	return *res
 }
+
+/*
+134. 加油站
+*/
+func CanCompleteCircuit(gas []int, cost []int) int {
+	length := len(gas)
+	start := 0
+	//外层循环控制从哪个加油站开始出发
+	//内层循环控制当前走过了多少个加油站
+	for start < length {
+		sum_gas := 0
+		sum_cost := 0
+		count := 0
+		for count < length {
+			idx := (start + count) % length //想成一个环形，如果从中间出发，我们还需要回到前面
+			sum_gas += gas[idx]
+			sum_cost += cost[idx]
+			if sum_cost > sum_gas {
+				break
+			}
+			count++
+		}
+		if count == length {
+			return start
+		} else {
+			start = start + count + 1 //直接跳过中间部分，因为从中间部分的任何一个位置开始肯定也到不了，体现出全局贪心，而不是局部贪心
+		}
+	}
+	return -1
+}
+
+/*
+40. 组合总和 II
+*/
+func CombinationSum2(candidates []int, target int) [][]int {
+	res := &[][]int{}
+	inter_res := []int{}
+	start := 0
+	sort.Ints(candidates)
+	Dfs(candidates, target, inter_res, res, start)
+	return *res
+}
+
+func Dfs(candidates []int, target int, inter_res []int, res *[][]int, start int) {
+	if target == 0 {
+		//一定要注意这里如果直接append inter_res，之后对inter_res的改动会影响之前res的结果，所以必须深拷贝一份
+		inter_res_copy := make([]int, len(inter_res))
+		copy(inter_res_copy, inter_res)
+		*res = append(*res, inter_res_copy)
+		return
+	}
+	for i := start; i < len(candidates); i++ {
+		//剪枝，当前target减去选中的值已经小于0，不考虑
+		if target-candidates[i] < 0 {
+			break
+		}
+		//剪枝，当前选中数字和上一个选中的数字相等，不考虑，因为我们已经排好序了
+		if i > start && candidates[i] == candidates[i-1] {
+			continue
+		}
+		inter_res = append(inter_res, candidates[i])
+		Dfs(candidates, target-candidates[i], inter_res, res, i+1)
+		inter_res = inter_res[:len(inter_res)-1]
+	}
+}

@@ -126,3 +126,7 @@ leetcode hot100 解题代码及思路（使用go语言）
 - **2025.6.11** 补充两道树的题：  
   - [129. 求根节点到叶节点数字之和](https://leetcode.cn/problems/sum-root-to-leaf-numbers)  
   - [144. 二叉树先序遍历](https://leetcode.cn/problems/binary-tree-preorder-traversal)
+
+- **2025.6.13** 补充两道好未来笔试题：  
+  - [134. 加油站](https://leetcode.cn/problems/gas-station)  
+  - [40. 组合总和 II](https://leetcode.cn/problems/combination-sum-ii)
