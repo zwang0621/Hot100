@@ -3314,3 +3314,46 @@ func Dfs(candidates []int, target int, inter_res []int, res *[][]int, start int)
 		inter_res = inter_res[:len(inter_res)-1]
 	}
 }
+
+/*
+39. 组合总和
+*/
+func CombinationSum(candidates []int, target int) [][]int {
+	res := &[][]int{}
+	inter_res := []int{}
+	start := 0
+	var backtrack func(start int, candidates []int, target int, res *[][]int, inter_res []int)
+	backtrack = func(start int, candidates []int, target int, res *[][]int, inter_res []int) {
+		if target == 0 {
+			inter_res_copy := make([]int, len(inter_res))
+			copy(inter_res_copy, inter_res)
+			*res = append(*res, inter_res_copy)
+			return
+		}
+		if target < 0 {
+			return
+		}
+		for i := start; i < len(candidates); i++ {
+			inter_res = append(inter_res, candidates[i])
+			backtrack(i, candidates, target-candidates[i], res, inter_res)
+			inter_res = inter_res[:len(inter_res)-1]
+		}
+	}
+	backtrack(start, candidates, target, res, inter_res)
+	return *res
+}
+
+/*
+470. 用 Rand7() 实现 Rand10()
+*/
+func rand10() int {
+	for {
+		a := rand7()
+		b := rand7()
+		new_num := (a-1)*7 + b //保证等概率生成1-49之间的数字，不能直接用a*b
+		//只有当数字小于等于40，我们才做映射，每四个数字一组，确保等概率
+		if new_num <= 40 {
+			return (new_num)%10 + 1
+		}
+	}
+}

@@ -130,3 +130,7 @@ leetcode hot100 解题代码及思路（使用go语言）
 - **2025.6.13** 补充两道好未来笔试题：  
   - [134. 加油站](https://leetcode.cn/problems/gas-station)  
   - [40. 组合总和 II](https://leetcode.cn/problems/combination-sum-ii)
+
+- **2025.6.17** 补充两道题：  
+  - [39. 组合总和](https://leetcode.cn/problems/combination-sum)  
+  - [470. 用 Rand7() 实现 Rand10()](https://leetcode.cn/problems/implement-rand10-using-rand7)
