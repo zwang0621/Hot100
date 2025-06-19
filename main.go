@@ -53,6 +53,7 @@ func main() {
 	// s := "()"
 	// fmt.Println(utils.IsValid(s))
 	//nums := []int{1, 3, 6, 7, 9, 4, 10, 5, 6}
-	s := "  Bob    Loves  Alice   "
-	fmt.Println(utils.ReverseWords(s))
+	// s := "  Bob    Loves  Alice   "
+	matrix := [][]byte{{'1', '0', '1', '0', '0'}, {'1', '0', '1', '1', '1'}, {'1', '1', '1', '1', '1'}, {'1', '0', '0', '1', '0'}}
+	fmt.Println(utils.MaximalSquare(matrix))
 }

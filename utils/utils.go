@@ -3314,3 +3314,129 @@ func Dfs(candidates []int, target int, inter_res []int, res *[][]int, start int)
 		inter_res = inter_res[:len(inter_res)-1]
 	}
 }
+
+/*
+39. 组合总和
+*/
+func CombinationSum(candidates []int, target int) [][]int {
+	res := &[][]int{}
+	inter_res := []int{}
+	start := 0
+	var backtrack func(start int, candidates []int, target int, res *[][]int, inter_res []int)
+	backtrack = func(start int, candidates []int, target int, res *[][]int, inter_res []int) {
+		if target == 0 {
+			inter_res_copy := make([]int, len(inter_res))
+			copy(inter_res_copy, inter_res)
+			*res = append(*res, inter_res_copy)
+			return
+		}
+		if target < 0 {
+			return
+		}
+		for i := start; i < len(candidates); i++ {
+			inter_res = append(inter_res, candidates[i])
+			backtrack(i, candidates, target-candidates[i], res, inter_res)
+			inter_res = inter_res[:len(inter_res)-1]
+		}
+	}
+	backtrack(start, candidates, target, res, inter_res)
+	return *res
+}
+
+/*
+470. 用 Rand7() 实现 Rand10()
+*/
+func rand10() int {
+	for {
+		a := rand7()
+		b := rand7()
+		new_num := (a-1)*7 + b //保证等概率生成1-49之间的数字，不能直接用a*b
+		//只有当数字小于等于40，我们才做映射，每四个数字一组，确保等概率
+		if new_num <= 40 {
+			return (new_num)%10 + 1
+		}
+	}
+}
+
+/*
+64. 最小路径和
+*/
+func MinPathSum(grid [][]int) int {
+	//二维动态规划 用dp[i][j]表示当前最小的路径总和
+	//三种转移情况
+	//第一行 dp[0][j]=dp[0][j-1]+grid[0][j]
+	//第一列 dp[i][0]=dp[i-1][0]+grid[i][0]
+	//和其他 dp[i][j]=min(dp[i-1][j],dp[i][j-1])+grid[i][j]
+	if len(grid) == 0 || len(grid[0]) == 0 {
+		return 0
+	}
+	row := len(grid)
+	col := len(grid[0])
+	dp := make([][]int, row)
+	for i := 0; i < row; i++ {
+		dp[i] = make([]int, col)
+	}
+	dp[0][0] = grid[0][0]
+	for i := 1; i < row; i++ {
+		dp[i][0] = dp[i-1][0] + grid[i][0]
+	}
+	for i := 1; i < col; i++ {
+		dp[0][i] = dp[0][i-1] + grid[0][i]
+	}
+	for i := 1; i < row; i++ {
+		for j := 1; j < col; j++ {
+			dp[i][j] = min(dp[i-1][j], dp[i][j-1]) + grid[i][j]
+		}
+	}
+	return dp[row-1][col-1]
+}
+
+/*
+221. 最大正方形
+*/
+func MaximalSquare(matrix [][]byte) int {
+	row := len(matrix)
+	col := len(matrix[0])
+	//dp表示以当前格内的元素作为正方形右下角的元素能构成的最大边长
+	dp := make([][]int, row)
+	max := 0
+	for i := 0; i < row; i++ {
+		dp[i] = make([]int, col)
+	}
+	for i := 0; i < row; i++ {
+		dp[i][0] = int(matrix[i][0] - '0')
+	}
+	for j := 0; j < col; j++ {
+		dp[0][j] = int(matrix[0][j] - '0')
+	}
+	for i := 1; i < row; i++ {
+		for j := 1; j < col; j++ {
+			if matrix[i][j] == '1' {
+				dp[i][j] = min(dp[i-1][j], min(dp[i][j-1], dp[i-1][j-1])) + 1
+			} else {
+				dp[i][j] = 0
+			}
+		}
+	}
+	for i := 0; i < row; i++ {
+		for j := 0; j < col; j++ {
+			if dp[i][j] > max {
+				max = dp[i][j]
+			}
+		}
+	}
+	return max * max
+}
+
+/*
+122.买卖股票的最佳时机 II
+*/
+func MaxProfit2(prices []int) int {
+	profit := 0
+	for i := 1; i < len(prices); i++ {
+		if prices[i]-prices[i-1] > 0 {
+			profit += prices[i] - prices[i-1]
+		}
+	}
+	return profit
+}
