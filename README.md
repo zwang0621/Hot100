@@ -139,3 +139,6 @@ leetcode hot100 解题代码及思路（使用go语言）
   - [64. 最小路径和](https://leetcode.cn/problems/minimum-path-sum)  
   - [221. 最大正方形](https://leetcode.cn/problems/maximal-square)
   - [122.买卖股票的最佳时机 II](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii)
+
+- **2025.6.24** 补充一道题：
+  - [14. 最长公共前缀](https://leetcode.cn/problems/longest-common-prefix)

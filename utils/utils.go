@@ -3440,3 +3440,46 @@ func MaxProfit2(prices []int) int {
 	}
 	return profit
 }
+
+/*
+14. 最长公共前缀
+*/
+func LongestCommonPrefix1(strs []string) string {
+	//方法一，按字典序排序，只需比较排序后的第一个和最后一个即可，时间复杂度较高
+	sort.Slice(strs, func(i, j int) bool {
+		return strs[i] < strs[j]
+	})
+	i := 0
+	for i < len(strs[0]) && i < len(strs[len(strs)-1]) {
+		if strs[0][i] == strs[len(strs)-1][i] {
+			i++
+		} else {
+			break
+		}
+	}
+	return strs[0][:i]
+}
+
+func LongestCommonPrefix2(strs []string) string {
+	//方法二，横向比较，遍历字符串切片，更新最长前缀
+	res := strs[0]
+	for i := 1; i < len(strs); i++ {
+		res = longestbetween2(res, strs[i])
+		if res == "" {
+			return ""
+		}
+	}
+	return res
+}
+
+func longestbetween2(str1, str2 string) string {
+	i := 0
+	for i < len(str1) && i < len(str2) {
+		if str1[i] == str2[i] {
+			i++
+		} else {
+			break
+		}
+	}
+	return str1[:i]
+}
