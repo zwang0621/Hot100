@@ -1,9 +1,29 @@
 package main
 
 import (
-	"Hot100_go/utils"
 	"fmt"
+	"sync"
 )
+
+// 协程1
+func printLetters(ch1, ch2 chan bool, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for i := 'A'; i <= 'Z'; i++ {
+		<-ch1
+		fmt.Print(string(i))
+		ch2 <- true
+	}
+}
+
+// 协程2
+func printNumbers(ch1, ch2 chan bool, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for i := 1; i <= 26; i++ {
+		<-ch2
+		fmt.Print(i)
+		ch1 <- true
+	}
+}
 
 func main() {
 	// fmt.Println(utils.TwoSum([]int{3, 2, 4}, 6))
@@ -54,6 +74,20 @@ func main() {
 	// fmt.Println(utils.IsValid(s))
 	//nums := []int{1, 3, 6, 7, 9, 4, 10, 5, 6}
 	// s := "  Bob    Loves  Alice   "
-	matrix := [][]byte{{'1', '0', '1', '0', '0'}, {'1', '0', '1', '1', '1'}, {'1', '1', '1', '1', '1'}, {'1', '0', '0', '1', '0'}}
-	fmt.Println(utils.MaximalSquare(matrix))
+	// matrix := [][]byte{{'1', '0', '1', '0', '0'}, {'1', '0', '1', '1', '1'}, {'1', '1', '1', '1', '1'}, {'1', '0', '0', '1', '0'}}
+	// fmt.Println(utils.MaximalSquare(matrix))
+
+	var wg sync.WaitGroup
+	letter_ch := make(chan bool, 1)
+	number_ch := make(chan bool, 1)
+
+	wg.Add(1)
+	go printNumbers(letter_ch, number_ch, &wg)
+
+	wg.Add(1)
+	go printLetters(letter_ch, number_ch, &wg)
+
+	letter_ch <- true
+	wg.Wait()
+
 }
