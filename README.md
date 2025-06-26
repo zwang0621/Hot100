@@ -144,3 +144,8 @@ leetcode hot100 解题代码及思路（使用go语言）
   - [14. 最长公共前缀](https://leetcode.cn/problems/longest-common-prefix)
 
 - **2025.6.24** main函数补充两个协程交替打印字母数字
+
+- **2025.6.26** 补充三道题：  
+  - [162. 寻找峰值](https://leetcode.cn/problems/find-peak-element)  
+  - [695. 岛屿的最大面积](https://leetcode.cn/problems/max-area-of-island)(岛屿类问题的统一模板，可参考200. 岛屿数量)
+  - [113. 路径总和 II](https://leetcode.cn/problems/path-sum-ii)

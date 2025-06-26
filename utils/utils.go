@@ -1494,9 +1494,9 @@ func BuildTree(preorder []int, inorder []int) *TreeNode { //二叉树
 }
 
 /*
-437.路经总和
+437. 路径总和 III
 */
-func PathSum(root *TreeNode, targetSum int) int { //二叉树
+func PathSum3(root *TreeNode, targetSum int) int { //二叉树
 	//哈希表记录前缀和
 	//递归回溯
 	hashmap := map[int]int{0: 1}
@@ -3482,4 +3482,98 @@ func longestbetween2(str1, str2 string) string {
 		}
 	}
 	return str1[:i]
+}
+
+/*
+162. 寻找峰值
+*/
+func FindPeakElement(nums []int) int {
+	//如果切片本身就是升序或者降序的，那么最后一个元素或者第一个元素就是峰值
+	//这是因为题目保证了峰值的存在性，因为nums[-1]==nums[n]==-无穷
+	//所以说本题可以使用二分查找来保证时间复杂度为logn
+
+	n := len(nums)
+	var get func(index int) int
+	get = func(index int) int {
+		if index == -1 || index == n {
+			return math.MinInt64
+		}
+		return nums[index]
+	}
+
+	left := 0
+	right := n - 1
+	for {
+		mid := (left + right) / 2
+		if get(mid) > get(mid-1) && get(mid) > get(mid+1) {
+			return mid
+		} else if get(mid) < get(mid-1) {
+			right = mid - 1
+		} else {
+			left = mid + 1
+		}
+	}
+}
+
+/*
+695. 岛屿的最大面积
+*/
+func MaxAreaOfIsland(grid [][]int) int {
+	res := 0
+	for i := 0; i < len(grid); i++ {
+		for j := 0; j < len(grid[0]); j++ {
+			if grid[i][j] == 1 {
+				area := 0
+				dfs(grid, i, j, &area)
+				if area > res {
+					res = area
+				}
+			}
+		}
+	}
+	return res
+}
+
+func dfs(grid [][]int, x, y int, area *int) {
+	if x < 0 || x >= len(grid) || y < 0 || y >= len(grid[0]) {
+		return
+	}
+	if grid[x][y] != 1 {
+		return
+	}
+
+	grid[x][y] = 2
+	//只在访问当前格子的时候面积加一
+	*area += 1
+
+	dfs(grid, x+1, y, area)
+	dfs(grid, x-1, y, area)
+	dfs(grid, x, y+1, area)
+	dfs(grid, x, y-1, area)
+}
+
+/*
+113. 路径总和 II
+*/
+func PathSum2(root *TreeNode, targetSum int) [][]int {
+	res := [][]int{}
+	path := []int{}
+	var dfs func(node *TreeNode, sum int)
+	dfs = func(node *TreeNode, sum int) {
+		if node == nil {
+			return
+		}
+		path = append(path, node.Val)
+		sum = sum - node.Val
+		if node.Left == nil && node.Right == nil && sum == 0 {
+			inter_res := make([]int, len(path))
+			copy(inter_res, path)
+			res = append(res, inter_res)
+		}
+		dfs(node.Left, sum)
+		dfs(node.Right, sum)
+		path = path[:len(path)-1] //回溯，取消选择
+	}
+	dfs(root, targetSum)
+	return res
 }
